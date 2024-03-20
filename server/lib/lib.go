@@ -1,15 +1,14 @@
 package lib
 
 // constant declarations
-
 const (
-	PORT           string = ":8080"
-	DB_FOLDER_PATH string = "database"
-	DB_FILE_PATH   string = "database/base.db"
-	COLOR_RED      string = "#f38ba8"
-	COLOR_BLUE     string = "#89b4fa"
-	COLOR_GREEN    string = "#a6e3a1"
-	COLOR_YELLOW   string = "#f9e2af"
+	PORT            string = ":8080"
+	SRC_FOLDER_PATH string = "base_src"
+	DB_FILE_PATH    string = SRC_FOLDER_PATH + "/" + "base.db"
+	COLOR_RED       string = "#f38ba8"
+	COLOR_BLUE      string = "#89b4fa"
+	COLOR_GREEN     string = "#a6e3a1"
+	COLOR_YELLOW    string = "#f9e2af"
 )
 
 // type definitions
