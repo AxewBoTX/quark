@@ -10,8 +10,8 @@ import (
 
 // handle database file and folder creation and initialize SQL database
 func PrepareDatabase() *sql.DB {
-	if _, folder_check_err := os.Stat(DB_FOLDER_PATH); os.IsNotExist(folder_check_err) {
-		folder_create_err := os.Mkdir(DB_FOLDER_PATH, 0755)
+	if _, folder_check_err := os.Stat(SRC_FOLDER_PATH); os.IsNotExist(folder_check_err) {
+		folder_create_err := os.Mkdir(SRC_FOLDER_PATH, 0755)
 		if folder_create_err != nil {
 			log.Fatal("Failed To Create Folder", "Error", folder_create_err)
 		}
