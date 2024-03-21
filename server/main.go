@@ -1,6 +1,7 @@
 package main
 
 import (
+	"embed"
 	"errors"
 	"net/http"
 	"os"
@@ -12,6 +13,9 @@ import (
 	"quark/server/handlers"
 	"quark/server/lib"
 )
+
+//go:embed all:public/lib
+var PublicDir embed.FS
 
 func main() {
 	// database preparations
