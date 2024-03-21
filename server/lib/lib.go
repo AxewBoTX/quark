@@ -1,5 +1,10 @@
 package lib
 
+import (
+	"github.com/charmbracelet/log"
+	"github.com/pelletier/go-toml"
+)
+
 // constant declarations
 const (
 	PORT            string = ":8080"
@@ -13,6 +18,12 @@ const (
 
 // type definitions
 type (
+	Config struct {
+		Host             string `toml:"host"`
+		Port             string `toml:"port"`
+		DatabaseFileName string `toml:"database_file_name"`
+		UserTableName    string `toml:"user_table_name"`
+	}
 	User struct {
 		ID            string `json:"id"`
 		Username      string `json:"username"`
@@ -20,3 +31,10 @@ type (
 		UserAuthToken string `json:"userAuthToken"`
 	}
 )
+
+// load bytes into config
+func (c *Config) LoadConfig(content []byte) {
+	if config_parse_err := toml.Unmarshal(content, c); config_parse_err != nil {
+		log.Fatal("Failed to parse config", "Error", config_parse_err)
+	}
+}
