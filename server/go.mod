@@ -7,6 +7,7 @@ require (
 	github.com/charmbracelet/log v0.3.1
 	github.com/google/uuid v1.6.0
 	github.com/labstack/echo/v4 v4.11.4
+	github.com/pelletier/go-toml v1.9.5
 	modernc.org/sqlite v1.29.5
 )
 
