@@ -1,0 +1,4 @@
+port = "8080"
+host = "http://localhost"
+database_file_name = "base.db"
+user_table_name = "usr_base"

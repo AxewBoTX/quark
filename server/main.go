@@ -18,8 +18,36 @@ import (
 var PublicDir embed.FS
 
 func main() {
+	//basic application setup with default config
+	lib.Prepare()
+	default_config_bytes, default_config_load_err := PublicDir.ReadFile(
+		lib.DEFAULT_CONFIG_FILE_PATH,
+	)
+	if default_config_load_err != nil {
+		log.Fatal("Failed to load default config file", "Error", default_config_load_err)
+	}
+	lib.DefaultConfig.LoadConfig(default_config_bytes)
+
+	// current config setup
+	if lib.CheckFileExists(lib.CURRENT_CONFIG_FILE_PATH) == true {
+		current_config_bytes, config_file_read_err := os.ReadFile(lib.CURRENT_CONFIG_FILE_PATH)
+		if config_file_read_err != nil {
+			log.Fatal("Failed to read current config file", "Error", config_file_read_err)
+		}
+		lib.CurrentConfig.LoadConfig(current_config_bytes)
+	} else {
+		if _, config_file_create_err := os.Create(lib.CURRENT_CONFIG_FILE_PATH); config_file_create_err != nil {
+			log.Fatal("Failed to create config file", "Error", config_file_create_err)
+		}
+		if config_write_err := os.WriteFile(lib.CURRENT_CONFIG_FILE_PATH, default_config_bytes, 0644); config_write_err != nil {
+			log.Fatal("Failed to write to config file", "Error", config_write_err)
+		}
+		lib.CurrentConfig.LoadConfig(default_config_bytes)
+	}
+	lib.HandleConfig()
+
 	// database preparations
-	DB := lib.PrepareDatabase()
+	DB := lib.CreateDatabase()
 	lib.HandleMigrations(DB)
 
 	// echo web server
