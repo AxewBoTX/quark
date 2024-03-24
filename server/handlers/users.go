@@ -2,7 +2,9 @@ package handlers
 
 import (
 	"database/sql"
+	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/charmbracelet/log"
 	"github.com/google/uuid"
@@ -11,10 +13,17 @@ import (
 	"quark/server/lib"
 )
 
+var (
+	UserListFetchQuery string = `SELECT * FROM %s;`
+	UserFetchQuery     string = `SELECT * FROM %s WHERE id = ? LIMIT 1;`
+	UserInsertQuery    string = `INSERT INTO %s (id,username,passwordHash,userAuthToken) VALUES(?,?,?,?);`
+	UserDeleteQuery    string = `DELETE FROM %s WHERE id = ?;`
+)
+
 func Users(router *echo.Group, DB *sql.DB) {
 	// (/users/) route GET request handler
 	router.GET("/", func(c echo.Context) error {
-		rows, rows_fetch_err := DB.Query("SELECT * FROM usr_base")
+		rows, rows_fetch_err := DB.Query(fmt.Sprintf(UserListFetchQuery, lib.USER_TABLE_NAME))
 		if rows_fetch_err != nil {
 			log.Error("Failed To Fetch usr_base rows", "Error", rows_fetch_err)
 			return c.String(http.StatusInternalServerError, "Database Rows Fetch Error")
@@ -40,7 +49,7 @@ func Users(router *echo.Group, DB *sql.DB) {
 	router.GET("/:userID", func(c echo.Context) error {
 		userID := c.Param("userID")
 		var user lib.User
-		if row_fetch_err := DB.QueryRow("SELECT * FROM usr_base WHERE id = ? LIMIT 1", userID).Scan(
+		if row_fetch_err := DB.QueryRow(fmt.Sprintf(UserFetchQuery, lib.USER_TABLE_NAME), userID).Scan(
 			&user.ID, &user.Username, &user.PasswordHash, &user.UserAuthToken,
 		); row_fetch_err != nil {
 			log.Error("Failed To Fetch Database Row", "Error", row_fetch_err)
@@ -58,11 +67,10 @@ func Users(router *echo.Group, DB *sql.DB) {
 		}
 		req_user.ID = uuid.New().String()
 
-		if _, row_create_err := DB.Exec(
-			`INSERT INTO usr_base (id,username,passwordHash,userAuthToken) VALUES(?,?,?,?)`,
+		if _, row_create_err := DB.Exec(fmt.Sprintf(UserInsertQuery, lib.USER_TABLE_NAME),
 			req_user.ID, req_user.Username, req_user.PasswordHash, req_user.UserAuthToken,
 		); row_create_err != nil {
-			log.Error("Failed To Create Database Row", row_create_err)
+			log.Error("Failed To Create Database Row", "Error", row_create_err)
 			return c.String(http.StatusInternalServerError, "Database Row Create Error")
 		}
 
@@ -71,11 +79,32 @@ func Users(router *echo.Group, DB *sql.DB) {
 
 	// (/users/:userID) route PATCH request handler
 	router.PATCH("/:userID", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Update User with ID "+c.Param("userID"))
+		var req_user lib.User
+		if req_user_bind_err := c.Bind(&req_user); req_user_bind_err != nil {
+			log.Error("Failed To Bind Request Data", "Error", req_user_bind_err)
+			return c.String(http.StatusInternalServerError, "Request Data Bind Error")
+		}
+		req_user.ID = c.Param("userID")
+
+		if _, user_update_err := DB.Exec(lib.GenerateSQLUpdateQuery(req_user)); user_update_err != nil {
+			log.Error("Failed To Bind Request Data", "Error", user_update_err)
+			return c.String(http.StatusInternalServerError, "Database Row Update Error")
+		}
+
+		return c.JSON(http.StatusOK, "SUCCESS")
 	})
 
 	// (/users/:userID) route DELETE request handler
 	router.DELETE("/:userID", func(c echo.Context) error {
-		return c.String(http.StatusOK, "DELETE User with ID "+c.Param("userID"))
+		UserID := strings.TrimSpace(c.Param("userID"))
+		if len(UserID) == 0 || UserID == "" {
+			log.Error("Request path parameter is nil")
+			return c.String(http.StatusBadRequest, "UserID must not be nil")
+		}
+		if _, user_delete_err := DB.Exec(fmt.Sprintf(UserDeleteQuery, lib.USER_TABLE_NAME), UserID); user_delete_err != nil {
+			log.Error("Failed To Delete Database Row", "Error", user_delete_err)
+			return c.String(http.StatusInternalServerError, "Database Row Delete Error")
+		}
+		return c.String(http.StatusOK, "SUCCESS")
 	})
 }
