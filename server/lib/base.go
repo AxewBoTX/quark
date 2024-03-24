@@ -37,6 +37,8 @@ type (
 		Username      string `json:"username"`
 		PasswordHash  string `json:"passwordHash"`
 		UserAuthToken string `json:"userAuthToken"`
+		Created       string `json:"created"`
+		Updated       string `json:"updated"`
 	}
 )
 
