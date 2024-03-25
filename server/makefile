@@ -1,11 +1,12 @@
 # Variables
 GO := go
+AIR := air
 BINARY_NAME := quark_server
 BUILD_DIR := build
 SRC_DIR := base_src
 
 dev: 
-	@air -c .air.toml
+	@$(AIR) -c .air.toml
 
 build:
 	@mkdir -p $(BUILD_DIR)
