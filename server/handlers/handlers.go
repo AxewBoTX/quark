@@ -8,5 +8,5 @@ import (
 
 // index(/) route handler
 func IndexHandler(c echo.Context) error {
-	return c.String(http.StatusOK, "Hello, World!")
+	return c.String(http.StatusOK, "Quark Server")
 }
