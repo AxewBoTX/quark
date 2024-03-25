@@ -6,7 +6,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/charmbracelet/log"
 	_ "modernc.org/sqlite"
 )
 
@@ -17,7 +16,7 @@ func CreateDatabase() *sql.DB {
 	}
 	DB, db_open_err := sql.Open("sqlite", DB_FILE_PATH)
 	if db_open_err != nil {
-		log.Fatal("Failed To Open Database", "Error", db_open_err)
+		FatalWithColor("FATAL", "0", COLOR_RED, "Failed To Open Database", "Error", db_open_err)
 	}
 	return DB
 }
@@ -36,7 +35,14 @@ var (
 // create database tables
 func HandleMigrations(DB *sql.DB) {
 	if _, table_create_err := DB.Exec(fmt.Sprintf(TableCreateQuery, USER_TABLE_NAME)); table_create_err != nil {
-		log.Fatal("Failed To Create usr_base table", "Error", table_create_err)
+		FatalWithColor(
+			"FATAL",
+			"0",
+			COLOR_RED,
+			"Failed TO Create Database Table",
+			"Error",
+			table_create_err,
+		)
 	}
 }
 

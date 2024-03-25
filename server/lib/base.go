@@ -1,6 +1,9 @@
 package lib
 
 import (
+	"os"
+
+	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/log"
 	"github.com/pelletier/go-toml"
 )
@@ -14,6 +17,9 @@ const (
 	COLOR_BLUE               string = "#89b4fa"
 	COLOR_GREEN              string = "#a6e3a1"
 	COLOR_YELLOW             string = "#f9e2af"
+	COLOR_ROSEWATER          string = "#f5e0dc"
+	COLOR_TEXT_DARK          string = "#1e1e2e"
+	COLOR_TEXT_LIGHT         string = "#cdd6f4"
 )
 
 // variable declarations
@@ -45,6 +51,63 @@ type (
 // load bytes into config
 func (c *Config) LoadConfig(content []byte) {
 	if config_parse_err := toml.Unmarshal(content, c); config_parse_err != nil {
-		log.Fatal("Failed to parse config", "Error", config_parse_err)
+		FatalWithColor("FATAL", "0", COLOR_RED, "Failed to parse config", "Error", config_parse_err)
 	}
+}
+
+// custom log function
+func InfoWithColor(heading, color_bg, color_fg string, message interface{}, opts ...interface{}) {
+	styles := log.DefaultStyles()
+	styles.Levels[log.InfoLevel] = lipgloss.NewStyle().
+		SetString(heading).
+		Padding(0, 1, 0, 1).
+		Background(lipgloss.Color(color_bg)).
+		Foreground(lipgloss.Color(color_fg))
+	logger := log.NewWithOptions(os.Stdout, log.Options{
+		ReportTimestamp: true,
+	})
+	logger.SetStyles(styles)
+	logger.Info(message, opts...)
+}
+
+func ErrorWithColor(heading, color_bg, color_fg string, message interface{}, opts ...interface{}) {
+	styles := log.DefaultStyles()
+	styles.Levels[log.ErrorLevel] = lipgloss.NewStyle().
+		SetString(heading).
+		Padding(0, 1, 0, 1).
+		Background(lipgloss.Color(color_bg)).
+		Foreground(lipgloss.Color(color_fg))
+	logger := log.NewWithOptions(os.Stdout, log.Options{
+		ReportTimestamp: true,
+	})
+	logger.SetStyles(styles)
+	logger.Error(message, opts...)
+}
+
+func FatalWithColor(heading, color_bg, color_fg string, message interface{}, opts ...interface{}) {
+	styles := log.DefaultStyles()
+	styles.Levels[log.FatalLevel] = lipgloss.NewStyle().
+		SetString(heading).
+		Padding(0, 1, 0, 1).
+		Background(lipgloss.Color(color_bg)).
+		Foreground(lipgloss.Color(color_fg))
+	logger := log.NewWithOptions(os.Stdout, log.Options{
+		ReportTimestamp: true,
+	})
+	logger.SetStyles(styles)
+	logger.Fatal(message, opts...)
+}
+
+func WarnWithColor(heading, color_bg, color_fg string, message interface{}, opts ...interface{}) {
+	styles := log.DefaultStyles()
+	styles.Levels[log.WarnLevel] = lipgloss.NewStyle().
+		SetString(heading).
+		Padding(0, 1, 0, 1).
+		Background(lipgloss.Color(color_bg)).
+		Foreground(lipgloss.Color(color_fg))
+	logger := log.NewWithOptions(os.Stdout, log.Options{
+		ReportTimestamp: true,
+	})
+	logger.SetStyles(styles)
+	logger.Warn(message, opts...)
 }
