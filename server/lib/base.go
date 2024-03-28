@@ -24,10 +24,11 @@ const (
 
 // variable declarations
 var (
-	HOST            string
-	PORT            string
-	DB_FILE_PATH    string
-	USER_TABLE_NAME string
+	HOST               string
+	PORT               string
+	DB_FILE_PATH       string
+	USER_TABLE_NAME    string
+	MESSAGE_TABLE_NAME string
 )
 
 // type definitions
@@ -37,6 +38,7 @@ type (
 		Port             string `toml:"port"`
 		DatabaseFileName string `toml:"database_file_name"`
 		UserTableName    string `toml:"user_table_name"`
+		MessageTableName string `toml:"message_table_name"`
 	}
 	User struct {
 		ID            string `json:"id"`
@@ -45,6 +47,12 @@ type (
 		UserAuthToken string `json:"userAuthToken"`
 		Created       string `json:"created"`
 		Updated       string `json:"updated"`
+	}
+	Message struct {
+		ID      string `json:"id"`
+		UserID  string `json:"user_id"`
+		Body    string `json:"body"`
+		Created string `json:"created"`
 	}
 )
 

@@ -22,7 +22,7 @@ func CreateDatabase() *sql.DB {
 }
 
 var (
-	TableCreateQuery = `CREATE TABLE IF NOT EXISTS %s(
+	UserTableCreateQuery = `CREATE TABLE IF NOT EXISTS %s(
 		id TEXT PRIMARY KEY,
 		username TEXT UNIQUE,
 		passwordHash TEXT,
@@ -30,11 +30,27 @@ var (
 		created TEXT,
 		updated TEXT
 	);`
+	MessageTableCreateQuery = `CREATE TABLE IF NOT EXISTS %s(
+		id TEXT PRIMARY KEY,
+		user_id TEXT,
+		created TEXT,
+		FOREIGN KEY(user_id) REFERENCES %s(id) ON DELETE CASCADE
+	);`
 )
 
 // create database tables
 func HandleMigrations(DB *sql.DB) {
-	if _, table_create_err := DB.Exec(fmt.Sprintf(TableCreateQuery, USER_TABLE_NAME)); table_create_err != nil {
+	if _, table_create_err := DB.Exec(fmt.Sprintf(UserTableCreateQuery, USER_TABLE_NAME)); table_create_err != nil {
+		FatalWithColor(
+			"FATAL",
+			"0",
+			COLOR_RED,
+			"Failed TO Create Database Table",
+			"Error",
+			table_create_err,
+		)
+	}
+	if _, table_create_err := DB.Exec(fmt.Sprintf(MessageTableCreateQuery, MESSAGE_TABLE_NAME, USER_TABLE_NAME)); table_create_err != nil {
 		FatalWithColor(
 			"FATAL",
 			"0",

@@ -55,6 +55,16 @@ func HandleConfig() {
 	} else {
 		USER_TABLE_NAME = CurrentConfig.UserTableName
 	}
+	if len(CurrentConfig.MessageTableName) == 0 || CurrentConfig.MessageTableName == "" {
+		WarnWithColor("WARN",
+			"0",
+			COLOR_YELLOW,
+			"MessageTableName value not found in config, using default value",
+		)
+		MESSAGE_TABLE_NAME = DefaultConfig.MessageTableName
+	} else {
+		MESSAGE_TABLE_NAME = CurrentConfig.MessageTableName
+	}
 }
 
 func CheckFileExists(filename string) bool {
