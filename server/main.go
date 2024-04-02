@@ -77,6 +77,7 @@ func main() {
 	// route handlers
 	server.GET("/", handlers.IndexHandler)
 	handlers.Users(server.Group("/users"), DB)
+	handlers.Messages(server.Group("/messages"), DB)
 
 	// this function runs after the main function has ended
 	defer func() {

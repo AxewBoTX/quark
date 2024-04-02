@@ -33,6 +33,7 @@ var (
 	MessageTableCreateQuery = `CREATE TABLE IF NOT EXISTS %s(
 		id TEXT PRIMARY KEY,
 		user_id TEXT,
+		body TEXT,
 		created TEXT,
 		FOREIGN KEY(user_id) REFERENCES %s(id) ON DELETE CASCADE
 	);`
