@@ -156,7 +156,7 @@ func Users(router *echo.Group, DB *sql.DB) {
 		UserID := strings.TrimSpace(c.Param("userID"))
 		if len(UserID) == 0 || UserID == "" {
 			lib.ErrorWithColor("ERROR", "0", lib.COLOR_RED, "Request path parameter is nil")
-			return c.String(http.StatusBadRequest, "UserID must not be nil")
+			return c.String(http.StatusBadRequest, "Request path parameter is nil")
 		}
 		if _, user_delete_err := DB.Exec(fmt.Sprintf(UserDeleteQuery, lib.USER_TABLE_NAME), UserID); user_delete_err != nil {
 			lib.ErrorWithColor(
