@@ -7,6 +7,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// (/auth/register) route handler
 func AuthRegisterHandler(c echo.Context) error {
 	log.Info(
 		map[string]interface{}{
@@ -18,6 +19,7 @@ func AuthRegisterHandler(c echo.Context) error {
 	return c.JSON(http.StatusOK, "PASS")
 }
 
+// (/auth/login) route handler
 func AuthLoginHandler(c echo.Context) error {
 	log.Info(
 		map[string]interface{}{

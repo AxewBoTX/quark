@@ -4,7 +4,7 @@ AIR := air
 MAKE := make
 TEMPL := templ
 BUN := bun
-BINARY_NAME := quark_server
+BINARY_NAME := quark_client
 BUILD_DIR := build
 SRC_DIR := base_src
 

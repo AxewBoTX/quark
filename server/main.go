@@ -13,12 +13,12 @@ import (
 )
 
 //go:embed all:public/lib
-var PublicDir embed.FS
+var LibDir embed.FS
 
 func main() {
 	//basic application setup with default config
 	lib.Prepare()
-	default_config_bytes, default_config_load_err := PublicDir.ReadFile(
+	default_config_bytes, default_config_load_err := LibDir.ReadFile(
 		lib.DEFAULT_CONFIG_FILE_PATH,
 	)
 	if default_config_load_err != nil {

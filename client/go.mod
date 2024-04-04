@@ -4,13 +4,14 @@ go 1.22.2
 
 require (
 	github.com/a-h/templ v0.2.648
+	github.com/charmbracelet/lipgloss v0.10.0
 	github.com/charmbracelet/log v0.4.0
 	github.com/labstack/echo/v4 v4.11.4
+	github.com/pelletier/go-toml v1.9.5
 )
 
 require (
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
-	github.com/charmbracelet/lipgloss v0.10.0 // indirect
 	github.com/go-logfmt/logfmt v0.6.0 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/labstack/gommon v0.4.2 // indirect
