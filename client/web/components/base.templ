@@ -1,0 +1,15 @@
+package components
+
+templ Base_HTML() {
+	<html>
+		<head>
+			<title>HTMX Web App</title>
+			<link rel="stylesheet" href="public/lib/index.css"/>
+			<script src="public/lib/htmx.min.js"></script>
+		</head>
+		<body>
+			@Navbar()
+			{ children... }
+		</body>
+	</html>
+}

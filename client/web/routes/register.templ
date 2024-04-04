@@ -1,0 +1,44 @@
+package routes
+
+import (
+	"quark/client/web/components"
+)
+
+templ Register_Page() {
+	@components.Base_HTML() {
+		<div class="flex flex-col items-center mt-[50px] gap-[20px]">
+			<h1 class="text-4xl">Register</h1>
+			<form
+				hx-post="/auth/register"
+				hx-swap="none"
+				name="registerForm"
+				class="flex flex-col items-center gap-[15px] w-full"
+			>
+				<input
+					name="username"
+					placeholder="Username"
+					autocomplete="off"
+					class="input input-bordered w-full max-w-[250px]"
+				/>
+				<input
+					name="password"
+					placeholder="Password"
+					autocomplete="off"
+					class="input input-bordered w-full max-w-[250px]"
+				/>
+				<input
+					name="passwordConfirm"
+					placeholder="Confirm Password"
+					autocomplete="off"
+					class="input input-bordered w-full max-w-[250px]"
+				/>
+				<button type="submit" class="btn w-full max-w-[180px]">
+					<!-- {#if loading == true} -->
+					<!-- <span class="loading loading-ring loading-lg"></span> -->
+					<!-- {:else} Register {/if} -->
+					Register
+				</button>
+			</form>
+		</div>
+	}
+}
