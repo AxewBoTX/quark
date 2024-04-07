@@ -2,6 +2,8 @@ package lib
 
 import (
 	"os"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 var DefaultConfig Config
@@ -159,4 +161,14 @@ func CreateFolder(foldername string) {
 			folder_create_err,
 		)
 	}
+}
+
+func HashString(input string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(input), 14)
+	return string(bytes), err
+}
+
+func CheckStringHash(input, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(input))
+	return err == nil
 }

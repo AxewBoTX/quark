@@ -15,7 +15,7 @@ import (
 
 var (
 	UserListFetchQuery string = `SELECT * FROM %s;`
-	UserFetchQuery     string = `SELECT * FROM %s WHERE id = ? LIMIT 1;`
+	UserFetchQuery     string = `SELECT * FROM %s WHERE username = ? LIMIT 1;`
 	UserInsertQuery    string = `INSERT INTO %s (id,username,passwordHash,userAuthToken,created,updated) VALUES(?,?,?,?,?,?);`
 	UserDeleteQuery    string = `DELETE FROM %s WHERE id = ?;`
 )
@@ -59,11 +59,11 @@ func Users(router *echo.Group, DB *sql.DB) {
 		return c.JSON(http.StatusOK, users)
 	})
 
-	// (/users/:userID) route GET request handler
-	router.GET("/:userID", func(c echo.Context) error {
-		userID := c.Param("userID")
+	// (/users/:username) route GET request handler
+	router.GET("/:username", func(c echo.Context) error {
+		username := c.Param("username")
 		var user lib.User
-		if row_fetch_err := DB.QueryRow(fmt.Sprintf(UserFetchQuery, lib.USER_TABLE_NAME), userID).Scan(
+		if row_fetch_err := DB.QueryRow(fmt.Sprintf(UserFetchQuery, lib.USER_TABLE_NAME), username).Scan(
 			&user.ID, &user.Username, &user.PasswordHash, &user.UserAuthToken, &user.Created, &user.Updated,
 		); row_fetch_err != nil {
 			lib.ErrorWithColor(
