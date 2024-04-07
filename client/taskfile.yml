@@ -1,0 +1,25 @@
+version: "3"
+
+env:
+  BINARY_NAME: "quark_client"
+  BUILD_DIR: "build"
+  SRC_DIR: "base_src"
+
+tasks:
+  dev:
+    - air -c .air.toml
+  air:
+    - task: generate
+    - go build -o ./tmp/main .
+  dev-tw:
+    - bun tailwindcss -i ./tailwind/input.css -o ./public/lib/index.css
+  generate:
+    - templ generate
+  build:
+    - mkdir -p $BUILD_DIR
+    - go build -o $BUILD_DIR/$BINARY_NAME .
+  clean:
+    - rm -rf $BUILD_DIR
+  clean-all:
+    - task: clean
+    - rm -rf $SRC_DIR
