@@ -23,6 +23,7 @@ var (
 func Messages(router *echo.Group, DB *sql.DB) {
 	// (/messages/) route GET request handler
 	router.GET("/", func(c echo.Context) error {
+		// fetch database rows
 		rows, rows_fetch_err := DB.Query(fmt.Sprintf(MessageListFetchQuery, lib.MESSAGE_TABLE_NAME))
 		if rows_fetch_err != nil {
 			lib.ErrorWithColor(
@@ -39,6 +40,7 @@ func Messages(router *echo.Group, DB *sql.DB) {
 			rows.Close()
 		}()
 
+		// scan database rows into an array
 		var messages []lib.Message
 		for rows.Next() {
 			var message lib.Message
@@ -63,6 +65,8 @@ func Messages(router *echo.Group, DB *sql.DB) {
 	router.GET("/:messageID", func(c echo.Context) error {
 		messageID := c.Param("messageID")
 		var message lib.Message
+
+		// fetch database row && scan into struct
 		if row_fetch_err := DB.QueryRow(fmt.Sprintf(MessageFetchQuery, lib.MESSAGE_TABLE_NAME), messageID).Scan(
 			&message.ID, &message.UserID, &message.Body, &message.Created,
 		); row_fetch_err != nil {
@@ -83,6 +87,8 @@ func Messages(router *echo.Group, DB *sql.DB) {
 	router.POST("/", func(c echo.Context) error {
 		current_time := time.Now().Format(time.RFC3339)
 		var req_message lib.Message
+
+		// bind request data
 		if req_message_bind_err := c.Bind(&req_message); req_message_bind_err != nil {
 			lib.ErrorWithColor(
 				"ERROR",
@@ -97,6 +103,7 @@ func Messages(router *echo.Group, DB *sql.DB) {
 		req_message.ID = uuid.New().String()
 		req_message.Created = current_time
 
+		// insert database row
 		if _, row_create_err := DB.Exec(fmt.Sprintf(MessageInsertQuery, lib.MESSAGE_TABLE_NAME),
 			req_message.ID, req_message.UserID, req_message.Body, current_time,
 		); row_create_err != nil {
@@ -121,6 +128,8 @@ func Messages(router *echo.Group, DB *sql.DB) {
 			lib.ErrorWithColor("ERROR", "0", lib.COLOR_RED, "Request path parameter is nil")
 			return c.String(http.StatusBadRequest, "Request path parameter is nil")
 		}
+
+		// delete database row
 		if _, message_delete_err := DB.Exec(fmt.Sprintf(MessageDeleteQuery, lib.MESSAGE_TABLE_NAME), messageID); message_delete_err != nil {
 			lib.ErrorWithColor(
 				"ERROR",

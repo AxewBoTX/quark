@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 	"strings"
+	"time"
 
-	"github.com/charmbracelet/log"
 	"github.com/go-resty/resty/v2"
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
@@ -84,7 +84,6 @@ func AuthRegisterHandler(c echo.Context) error {
 		)
 		return c.JSON(http.StatusInternalServerError, "FAIL_RGS")
 	}
-	log.Info(user) // debug:print_statement
 	return c.JSON(http.StatusOK, "PASS_RGS")
 }
 
@@ -94,7 +93,7 @@ func AuthLoginHandler(c echo.Context) error {
 	username := strings.TrimSpace(c.FormValue("username"))
 	password := strings.TrimSpace(c.FormValue("password"))
 
-	// get user data from server
+	// fetch user data from server
 	res, user_login_err := auth_client.R().
 		Get(lib.SERVER_HOST + lib.SERVER_PORT + "/users/" + username)
 	if user_login_err != nil {
@@ -123,9 +122,47 @@ func AuthLoginHandler(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, "FAIL_LGN")
 	}
 
-	// verify password
+	// verify password && update UserAuthToken
 	if lib.CheckStringHash(password, user.PasswordHash) == true {
-		log.Info("Password Matches Bro!!!")
+		res, user_auth_token_update_err := auth_client.R().
+			SetHeader("Content-Type", "application/json").
+			SetBody(map[string]interface{}{
+				"userAuthToken": uuid.New().String(),
+			}).
+			Patch(lib.SERVER_HOST + lib.SERVER_PORT + "/users/" + user.ID)
+		if user_auth_token_update_err != nil {
+			lib.ErrorWithColor(
+				"ERROR",
+				"0",
+				lib.COLOR_RED,
+				"Failed To Send Data To Server",
+				"Error",
+				user_auth_token_update_err,
+			)
+			return c.JSON(http.StatusInternalServerError, "FAIL_LGN")
+		}
+
+		// handle server response
+		var up_user lib.User
+		if resp_decode_err := json.Unmarshal(res.Body(), &up_user); resp_decode_err != nil {
+			lib.ErrorWithColor(
+				"ERROR",
+				"0",
+				lib.COLOR_RED,
+				"Failed To Decode Server Response",
+				"Error",
+				resp_decode_err,
+			)
+			return c.JSON(http.StatusInternalServerError, "FAIL_LGN")
+		}
+
+		// set session cookie
+		c.SetCookie(&http.Cookie{
+			Name:    "usr_session",
+			Value:   up_user.UserAuthToken,
+			Path:    "/",
+			Expires: time.Now().Add(90 * 24 * time.Hour),
+		})
 	} else {
 		lib.ErrorWithColor(
 			"ERROR",

@@ -14,15 +14,17 @@ import (
 )
 
 var (
-	UserListFetchQuery string = `SELECT * FROM %s;`
-	UserFetchQuery     string = `SELECT * FROM %s WHERE username = ? LIMIT 1;`
-	UserInsertQuery    string = `INSERT INTO %s (id,username,passwordHash,userAuthToken,created,updated) VALUES(?,?,?,?,?,?);`
-	UserDeleteQuery    string = `DELETE FROM %s WHERE id = ?;`
+	UserListFetchQuery      string = `SELECT * FROM %s;`
+	UserFetchQuery_Username string = `SELECT * FROM %s WHERE username = ? LIMIT 1;`
+	UserFetchQuery_ID       string = `SELECT * FROM %s WHERE id = ? LIMIT 1;`
+	UserInsertQuery         string = `INSERT INTO %s (id,username,passwordHash,userAuthToken,created,updated) VALUES(?,?,?,?,?,?);`
+	UserDeleteQuery         string = `DELETE FROM %s WHERE id = ?;`
 )
 
 func Users(router *echo.Group, DB *sql.DB) {
 	// (/users/) route GET request handler
 	router.GET("/", func(c echo.Context) error {
+		// fetch user rows from database
 		rows, rows_fetch_err := DB.Query(fmt.Sprintf(UserListFetchQuery, lib.USER_TABLE_NAME))
 		if rows_fetch_err != nil {
 			lib.ErrorWithColor(
@@ -39,6 +41,7 @@ func Users(router *echo.Group, DB *sql.DB) {
 			rows.Close()
 		}()
 
+		// scan the rows into an array
 		var users []lib.User
 		for rows.Next() {
 			var user lib.User
@@ -62,8 +65,13 @@ func Users(router *echo.Group, DB *sql.DB) {
 	// (/users/:username) route GET request handler
 	router.GET("/:username", func(c echo.Context) error {
 		username := c.Param("username")
+		if len(username) == 0 || username == "" {
+			lib.ErrorWithColor("ERROR", "0", lib.COLOR_RED, "Request path parameter is nil")
+			return c.String(http.StatusBadRequest, "Username must not be nil")
+		}
 		var user lib.User
-		if row_fetch_err := DB.QueryRow(fmt.Sprintf(UserFetchQuery, lib.USER_TABLE_NAME), username).Scan(
+		// fetch database row and scan into struct
+		if row_fetch_err := DB.QueryRow(fmt.Sprintf(UserFetchQuery_Username, lib.USER_TABLE_NAME), username).Scan(
 			&user.ID, &user.Username, &user.PasswordHash, &user.UserAuthToken, &user.Created, &user.Updated,
 		); row_fetch_err != nil {
 			lib.ErrorWithColor(
@@ -83,6 +91,8 @@ func Users(router *echo.Group, DB *sql.DB) {
 	router.POST("/", func(c echo.Context) error {
 		current_time := time.Now().Format(time.RFC3339)
 		var req_user lib.User
+
+		// bind request data to struct
 		if req_user_bind_err := c.Bind(&req_user); req_user_bind_err != nil {
 			lib.ErrorWithColor(
 				"ERROR",
@@ -98,6 +108,7 @@ func Users(router *echo.Group, DB *sql.DB) {
 		req_user.Created = current_time
 		req_user.Updated = current_time
 
+		// insert database row
 		if _, row_create_err := DB.Exec(fmt.Sprintf(UserInsertQuery, lib.USER_TABLE_NAME),
 			req_user.ID, req_user.Username, req_user.PasswordHash, req_user.UserAuthToken, current_time, current_time,
 		); row_create_err != nil {
@@ -122,6 +133,8 @@ func Users(router *echo.Group, DB *sql.DB) {
 			lib.ErrorWithColor("ERROR", "0", lib.COLOR_RED, "Request path parameter is nil")
 			return c.String(http.StatusBadRequest, "UserID must not be nil")
 		}
+
+		// bind request data into a struct
 		var req_user lib.User
 		if req_user_bind_err := c.Bind(&req_user); req_user_bind_err != nil {
 			lib.ErrorWithColor(
@@ -136,6 +149,7 @@ func Users(router *echo.Group, DB *sql.DB) {
 		}
 		req_user.ID = UserID
 
+		// update database row
 		if _, user_update_err := DB.Exec(lib.GenerateSQLUpdateQuery(req_user)); user_update_err != nil {
 			lib.ErrorWithColor(
 				"ERROR",
@@ -148,7 +162,29 @@ func Users(router *echo.Group, DB *sql.DB) {
 			return c.String(http.StatusInternalServerError, "Database Row Update Error")
 		}
 
-		return c.JSON(http.StatusOK, "SUCCESS")
+		// fetch updated database row
+		var up_user lib.User
+		if user_fetch_err := DB.QueryRow(fmt.Sprintf(UserFetchQuery_ID, lib.USER_TABLE_NAME), UserID).
+			Scan(
+				&up_user.ID,
+				&up_user.Username,
+				&up_user.PasswordHash,
+				&up_user.UserAuthToken,
+				&up_user.Created,
+				&up_user.Updated,
+			); user_fetch_err != nil {
+			lib.ErrorWithColor(
+				"ERROR",
+				"0",
+				lib.COLOR_RED,
+				"Failed To Fetch Database Row",
+				"Error",
+				user_fetch_err,
+			)
+			return c.String(http.StatusInternalServerError, "Database Row Fetch Error")
+		}
+
+		return c.JSON(http.StatusOK, up_user)
 	})
 
 	// (/users/:userID) route DELETE request handler
@@ -158,6 +194,8 @@ func Users(router *echo.Group, DB *sql.DB) {
 			lib.ErrorWithColor("ERROR", "0", lib.COLOR_RED, "Request path parameter is nil")
 			return c.String(http.StatusBadRequest, "Request path parameter is nil")
 		}
+
+		// delete database row
 		if _, user_delete_err := DB.Exec(fmt.Sprintf(UserDeleteQuery, lib.USER_TABLE_NAME), UserID); user_delete_err != nil {
 			lib.ErrorWithColor(
 				"ERROR",
