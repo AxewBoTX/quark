@@ -1236,6 +1236,10 @@ html {
   align-items: center;
 }
 
+.justify-between {
+  justify-content: space-between;
+}
+
 .gap-\[15px\] {
   gap: 15px;
 }

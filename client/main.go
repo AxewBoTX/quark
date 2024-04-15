@@ -77,12 +77,16 @@ func main() {
 		Root:       "/",
 	}))
 
+	// middleware
+	server.Use(handlers.SessionManagerMiddleware)
+	// routes
 	server.GET("/", handlers.IndexHandler)
 	server.GET("/register", handlers.RegisterHandler)
 	server.GET("/login", handlers.LoginHandler)
 	server.GET("/chat", handlers.ChatHandler)
 	server.POST("/auth/login", handlers.AuthLoginHandler)
 	server.POST("/auth/register", handlers.AuthRegisterHandler)
+	server.GET("/auth/logout", handlers.AuthLogoutHandler)
 
 	// this function runs after the main function has ended
 	defer func() {

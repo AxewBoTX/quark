@@ -158,7 +158,7 @@ func AuthLoginHandler(c echo.Context) error {
 
 		// set session cookie
 		c.SetCookie(&http.Cookie{
-			Name:    "usr_session",
+			Name:    lib.SESSION_COOKIE_NAME,
 			Value:   up_user.UserAuthToken,
 			Path:    "/",
 			Expires: time.Now().Add(90 * 24 * time.Hour),
@@ -172,6 +172,16 @@ func AuthLoginHandler(c echo.Context) error {
 		)
 		return c.JSON(http.StatusInternalServerError, "FAIL_LGN_PASS")
 	}
-
 	return c.JSON(http.StatusOK, "PASS_LGN")
+}
+
+// (/auth/logout) route handler
+func AuthLogoutHandler(c echo.Context) error {
+	c.SetCookie(&http.Cookie{
+		Name:   lib.SESSION_COOKIE_NAME,
+		Value:  "",
+		Path:   "/",
+		MaxAge: -1,
+	})
+	return c.JSON(http.StatusOK, "PASS_LGO")
 }
