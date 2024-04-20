@@ -4,67 +4,55 @@ export default {
   daisyui: {
     themes: [
       {
-        "light-theme": {
-          primary: "#CFCA74",
-          secondary: "#CCC8A4",
-          accent: "#A5D0BB",
-          neutral: "#0f0b00",
-          "base-100": "#14140C",
-          info: "#007dc7",
-          success: "#54fb52",
-          warning: "#ff9f00",
-          error: "#FFB4AB",
-        },
         "dark-theme": {
-          primary: "#CFCA74",
-          surfaceTint: "#CFCA74",
-          onPrimary: "#343200",
-          primaryContainer: "#4B4900",
-          onPrimaryContainer: "#EBE68D",
-          secondary: "#CCC8A4",
-          onSecondary: "#333118",
-          secondaryContainer: "#4A482C",
-          onSecondaryContainer: "#E8E4BE",
-          accent: "#A5D0BB",
-          onAccent: "#0D3728",
-          accentContainer: "#264E3E",
-          onAccentContainer: "#C0ECD6",
-          error: "#FFB4AB",
-          onError: "#690005",
-          errorContainer: "#93000A",
-          onErrorContainer: "#FFDAD6",
-          "base-100": "#14140C",
-          "on-base-100": "#E6E2D5",
-          surface: "#14140C",
-          onSurface: "#E6E2D5",
-          surfaceVariant: "#49473A",
-          onSurfaceVariant: "#CAC7B5",
-          outline: "#949181",
-          outlineVariant: "#49473A",
-          shadow: "#000000",
-          scrim: "#000000",
-          inverseSurface: "#E6E2D5",
-          inverseOnSurface: "#323128",
-          inversePrimary: "#646116",
-          primaryFixed: "#EBE68D",
-          onPrimaryFixed: "#1E1C00",
-          primaryFixedDim: "#CFCA74",
-          onPrimaryFixedVariant: "#4B4900",
-          secondaryFixed: "#E8E4BE",
-          onSecondaryFixed: "#1D1C05",
-          secondaryFixedDim: "#CCC8A4",
-          onSecondaryFixedVariant: "#4A482C",
-          tertiaryFixed: "#C0ECD6",
-          onTertiaryFixed: "#002115",
-          tertiaryFixedDim: "#A5D0BB",
-          onTertiaryFixedVariant: "#264E3E",
-          surfaceDim: "#14140C",
-          surfaceBright: "#3B3930",
-          surfaceContainerLowest: "#0F0E07",
-          surfaceContainerLow: "#1D1C14",
-          surfaceContainer: "#212018",
-          surfaceContainerHigh: "#2B2A22",
-          surfaceContainerHighest: "#36352C",
+          primary: "#CFCA74", //primary
+          "primary-content": "#343200", //onPrimary
+          primaryContainer: "#4B4900", //primaryContainer
+          onPrimaryContainer: "#EBE68D", //onPrimaryContaienr
+          secondary: "#CCC8A4", //secondary
+          "secondary-content": "#333118", //onSecondary
+          secondaryContainer: "#4A482C", //secondaryContainer
+          onSecondaryContainer: "#E8E4BE", //onSecondaryContainer
+          accent: "#A5D0BB", //tertiary
+          "accent-content": "#0D3728", //onTertiary
+          accentContainer: "#264E3E", //tertiaryContainer
+          onAccentContainer: "#C0ECD6", //onTertiaryContainer
+          error: "#FFB4AB", //error
+          "error-content": "#690005", // onError
+          errorContainer: "#93000A", //errorContainer
+          onErrorContainer: "#FFDAD6", //onErrorContainer
+          "base-100": "#14140C", //background
+          "base-content": "#E6E2D5", //onBackground
+          surface: "#14140C", //surface
+          onSurface: "#E6E2D5", //onSurface
+          surfaceVariant: "#49473A", //surfaceVariant
+          onSurfaceVariant: "#CAC7B5", //onSurfaceVariant
+          outline: "#949181", //outline
+          outlineVariant: "#49473A", //outlineVariant
+          shadow: "#000000", //shadow
+          scrim: "#000000", //scrim
+          inverseSurface: "#E6E2D5", //inverseSurface
+          inverseOnSurface: "#323128", //inverseOnSurface
+          inversePrimary: "#646116", //inversePrimary
+          primaryFixed: "#EBE68D", //primaryFixed
+          onPrimaryFixed: "#1E1C00", //onPrimaryFixed
+          primaryFixedDim: "#CFCA74", //primaryFixedDim
+          onPrimaryFixedVariant: "#4B4900", //onPrimaryFixedDim
+          secondaryFixed: "#E8E4BE", //secondaryFixed
+          onSecondaryFixed: "#1D1C05", //onSecondaryFixed
+          secondaryFixedDim: "#CCC8A4", //secondaryFixedDim
+          onSecondaryFixedVariant: "#4A482C", //onSecondaryFixedVariant
+          tertiaryFixed: "#C0ECD6", //tertiaryFixed
+          onTertiaryFixed: "#002115", //onTertiaryFixed
+          tertiaryFixedDim: "#A5D0BB", //tertiaryFixedDim
+          onTertiaryFixedVariant: "#264E3E", //onTertiaryFixedVariant
+          surfaceDim: "#14140C", //surfaceDim
+          surfaceBright: "#3B3930", //surfaceBright
+          surfaceContainerLowest: "#0F0E07", //surfaceContainerLowest
+          surfaceContainerLow: "#1D1C14", //surfaceContainerLow
+          surfaceContainer: "#212018", //surfaceContainer
+          surfaceContainerHigh: "#2B2A22", //surfaceContainerHigh
+          surfaceContainerHighest: "#36352C", //surfaceContainerHighest
         },
       },
     ],

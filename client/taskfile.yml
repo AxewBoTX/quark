@@ -12,7 +12,7 @@ tasks:
     - task: generate
     - go build -o ./tmp/main .
   dev-tw:
-    - bun tailwindcss -i ./tailwind/input.css -o ./public/lib/index.css
+    - bun tailwindcss -i ./tailwind/input.css -o ./public/lib/index.css --minify --watch
   generate:
     - templ generate
   build:
