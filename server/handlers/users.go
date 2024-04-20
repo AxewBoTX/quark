@@ -13,6 +13,7 @@ import (
 	"quark/server/lib"
 )
 
+// database queries
 var (
 	UserListFetchQuery      string = `SELECT * FROM %s;`
 	UserFetchQuery_Username string = `SELECT * FROM %s WHERE username = ? LIMIT 1;`

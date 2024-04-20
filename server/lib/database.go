@@ -21,6 +21,7 @@ func CreateDatabase() *sql.DB {
 	return DB
 }
 
+// database queries
 var (
 	UserTableCreateQuery = `CREATE TABLE IF NOT EXISTS %s(
 		id TEXT PRIMARY KEY,

@@ -177,11 +177,14 @@ func AuthLoginHandler(c echo.Context) error {
 
 // (/auth/logout) route handler
 func AuthLogoutHandler(c echo.Context) error {
+	// remove the session cookie
 	c.SetCookie(&http.Cookie{
 		Name:   lib.SESSION_COOKIE_NAME,
 		Value:  "",
 		Path:   "/",
 		MaxAge: -1,
 	})
+	// redirect user to /login route
+	c.Response().Header().Set("HX-Redirect", "/login")
 	return c.JSON(http.StatusOK, "PASS_LGO")
 }

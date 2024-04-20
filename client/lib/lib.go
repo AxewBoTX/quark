@@ -10,12 +10,14 @@ var DefaultConfig Config
 
 var CurrentConfig Config
 
+// preparations before running the app process
 func Prepare() {
 	if CheckFolderExists(SRC_FOLDER_PATH) == false {
 		CreateFolder(SRC_FOLDER_PATH)
 	}
 }
 
+// handle config loading
 func HandleConfig() {
 	if len(CurrentConfig.Host) == 0 || CurrentConfig.Host == "" {
 		WarnWithColor("WARN",
@@ -59,6 +61,7 @@ func HandleConfig() {
 	}
 }
 
+// functions for handling IO
 func CheckFileExists(filename string) bool {
 	if _, file_check_err := os.Stat(filename); file_check_err != nil {
 		if os.IsNotExist(file_check_err) {
@@ -163,11 +166,13 @@ func CreateFolder(foldername string) {
 	}
 }
 
+// hash input string
 func HashString(input string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(input), 14)
 	return string(bytes), err
 }
 
+// compare input string with existing hash
 func CheckStringHash(input, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(input))
 	return err == nil

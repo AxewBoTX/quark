@@ -13,6 +13,7 @@ import (
 	"quark/server/lib"
 )
 
+// database queries
 var (
 	MessageListFetchQuery string = `SELECT * FROM %s;`
 	MessageFetchQuery     string = `SELECT * FROM %s WHERE id = ? LIMIT 1;`
