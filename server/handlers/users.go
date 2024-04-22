@@ -15,11 +15,12 @@ import (
 
 // database queries
 var (
-	UserListFetchQuery      string = `SELECT * FROM %s;`
-	UserFetchQuery_Username string = `SELECT * FROM %s WHERE username = ? LIMIT 1;`
-	UserFetchQuery_ID       string = `SELECT * FROM %s WHERE id = ? LIMIT 1;`
-	UserInsertQuery         string = `INSERT INTO %s (id,username,passwordHash,userAuthToken,created,updated) VALUES(?,?,?,?,?,?);`
-	UserDeleteQuery         string = `DELETE FROM %s WHERE id = ?;`
+	UserListFetchQuery            string = `SELECT * FROM %s;`
+	UserFetchQuery_Username       string = `SELECT * FROM %s WHERE username = ? LIMIT 1;`
+	UserFetchQuery_ID             string = `SELECT * FROM %s WHERE id = ? LIMIT 1;`
+	UserFetchQuerry_UserAuthToken string = `SELECT * FROM %s WHERE userAuthToken = ? LIMIT 1;`
+	UserInsertQuery               string = `INSERT INTO %s (id,username,passwordHash,userAuthToken,created,updated) VALUES(?,?,?,?,?,?);`
+	UserDeleteQuery               string = `DELETE FROM %s WHERE id = ?;`
 )
 
 func Users(router *echo.Group, DB *sql.DB) {
@@ -61,6 +62,31 @@ func Users(router *echo.Group, DB *sql.DB) {
 		}
 
 		return c.JSON(http.StatusOK, users)
+	})
+
+	// (/users/token/:token) route GET request handler
+	router.GET("/token/:token", func(c echo.Context) error {
+		token := c.Param("token")
+		if len(token) == 0 || token == "" {
+			lib.ErrorWithColor("ERROR", "0", lib.COLOR_RED, "Request path parameter is nil")
+			return c.String(http.StatusBadRequest, "Token must not be nil")
+		}
+		var user lib.User
+		// fetch database row and scan into struct
+		if row_fetch_err := DB.QueryRow(fmt.Sprintf(UserFetchQuerry_UserAuthToken, lib.USER_TABLE_NAME), token).Scan(
+			&user.ID, &user.Username, &user.PasswordHash, &user.UserAuthToken, &user.Created, &user.Updated,
+		); row_fetch_err != nil {
+			lib.ErrorWithColor(
+				"ERROR",
+				"0",
+				lib.COLOR_RED,
+				"Failed To Fetch Database Row",
+				"Error",
+				row_fetch_err,
+			)
+			return c.String(http.StatusInternalServerError, "Database Row Fetch Error")
+		}
+		return c.JSON(http.StatusOK, user)
 	})
 
 	// (/users/:username) route GET request handler

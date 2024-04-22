@@ -7,19 +7,7 @@ import (
 templ Register_Page() {
 	@components.Base_HTML() {
 		<script>
-	// page script starts
-	const fail_code = `"FAIL_RGS"`
-	const fail_toast = `
-		<div id="registerFailToast" role="alert" class="alert alert-error max-w-[300px] fixed top-5 right-5">
-		  <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-		  <span>Registration Failed</span>
-		</div>`
-	const pass_code = `"PASS_RGS"`
-	const pass_toast = `
-		<div id="registerPassToast" role="alert" class="alert alert-success max-w-[300px] fixed top-5 right-5">
-		  <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-		  <span>Your account was successfully registered</span>
-		</div>`
+	// page script ends
 	const handleRegisterFormSubmit = () => {
 		const registerButton = document.getElementById("registerButton")
 		registerButton.innerHTML = `<span class="loading loading-spinner loading-lg"></span>`
@@ -27,18 +15,11 @@ templ Register_Page() {
 	document.body.addEventListener("htmx:afterRequest", (event) => {
 		const registerButton = document.getElementById("registerButton")
 		registerButton.innerHTML = "Register"
-		const res = event.detail.xhr.response.toString().trim()
-		if (res === pass_code) {
-			document.body.insertAdjacentHTML('beforeend', pass_toast);
-			setTimeout(() => {
-				document.getElementById("registerPassToast").remove();
-			}, 2000);
-		} else if (res === fail_code) {
-			document.body.insertAdjacentHTML('beforeend', fail_toast);
-			setTimeout(() => {
-				document.getElementById("registerFailToast").remove();
-			}, 2000);
-		}
+		const res = JSON.parse(event.detail.xhr.response)
+		document.body.insertAdjacentHTML('beforeend', res.toast);
+		setTimeout(() => {
+			document.getElementById("registerToast").remove();
+		}, 2000);
 	})
 	// page script ends
 </script>

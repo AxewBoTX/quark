@@ -10,3 +10,4 @@ Single executable web client for quark server
 - FAIL_LGN -> Failed To Login User
 - FAIL_LGN_PASS -> Password Don't Match
 - PASS_LGO -> Successfully Logged Out
+- FAIL_LGO -> Failed To Logout

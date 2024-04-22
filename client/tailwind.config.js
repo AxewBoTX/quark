@@ -1,6 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./web/components/**/*.{templ,go}", "./web/routes/**/*.{templ,go}"],
+  content: [
+    "./web/components/**/*.{templ,go}",
+    "./web/routes/**/*.{templ,go}",
+    "./handlers/**/*.go",
+  ],
   daisyui: {
     themes: [
       {
