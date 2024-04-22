@@ -3,7 +3,7 @@ module quark/client
 go 1.22.2
 
 require (
-	github.com/a-h/templ v0.2.648
+	github.com/a-h/templ v0.2.663
 	github.com/charmbracelet/lipgloss v0.10.0
 	github.com/charmbracelet/log v0.4.0
 	github.com/go-resty/resty/v2 v2.12.0

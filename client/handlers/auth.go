@@ -172,6 +172,7 @@ func AuthLoginHandler(c echo.Context) error {
 		)
 		return c.JSON(http.StatusInternalServerError, "FAIL_LGN_PASS")
 	}
+	c.Response().Header().Set("HX-Redirect", "/chat")
 	return c.JSON(http.StatusOK, "PASS_LGN")
 }
 

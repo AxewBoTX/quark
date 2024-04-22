@@ -6,6 +6,53 @@ import (
 
 templ Login_Page() {
 	@components.Base_HTML() {
+		<script>
+	// page script starts
+	const fail_code = `"FAIL_LGN"`
+	const fail_toast = `
+		<div id="loginFailToast" role="alert" class="alert alert-error max-w-[300px] fixed top-5 right-5">
+		  <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+		  <span>Failed to Login</span>
+		</div>`
+	const fail_code_1 = `"FAIL_LGN_PASS"`
+	const fail_toast_1 = `
+		<div id="loginFailToast" role="alert" class="alert alert-error max-w-[300px] fixed top-5 right-5">
+		  <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+		  <span>Wrong Password</span>
+		</div>`
+	const pass_code = `"PASS_LGN"`
+	const pass_toast = `
+		<div id="loginPassToast" role="alert" class="alert alert-success max-w-[300px] fixed top-5 right-5">
+		  <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+		  <span>Successfully Logged In</span>
+		</div>`
+	const handleLoginFormSubmit = () => {
+		const loginButton = document.getElementById("loginButton")
+		loginButton.innerHTML = `<span class="loading loading-spinner loading-lg"></span>`
+	}
+	document.body.addEventListener("htmx:afterRequest", (event) => {
+		const loginButton = document.getElementById("loginButton")
+		loginButton.innerHTML = "Register"
+		const res = event.detail.xhr.response.toString().trim()
+		if (res === pass_code) {
+			document.body.insertAdjacentHTML('beforeend', pass_toast);
+			setTimeout(() => {
+				document.getElementById("loginPassToast").remove();
+			}, 2000);
+		} else if (res === fail_code) {
+			document.body.insertAdjacentHTML('beforeend', fail_toast);
+			setTimeout(() => {
+				document.getElementById("loginFailToast").remove();
+			}, 2000);
+		} else if (res == fail_code_1) {
+			document.body.insertAdjacentHTML('beforeend', fail_toast_1);
+			setTimeout(() => {
+				document.getElementById("loginFailToast").remove();
+			}, 2000);
+		}
+	})
+	// page script ends
+</script>
 		<div class="flex flex-col items-center mt-[50px] gap-[20px]">
 			<h1 class="text-4xl">Login</h1>
 			<form hx-post="/auth/login" hx-swap="none" name="loginForm" class="flex flex-col items-center gap-[15px] w-full">
@@ -21,7 +68,12 @@ templ Login_Page() {
 					autocomplete="off"
 					class="input input-bordered w-full max-w-[250px]"
 				/>
-				<button type="submit" class="btn btn-accent w-full max-w-[180px]">Login</button>
+				<button
+					hx-on:click="handleLoginFormSubmit()"
+					id="loginButton"
+					type="submit"
+					class="btn btn-accent w-full max-w-[180px]"
+				>Login</button>
 			</form>
 		</div>
 	}
