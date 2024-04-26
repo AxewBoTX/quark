@@ -77,6 +77,8 @@ func main() {
 		Root:       "/",
 	}))
 
+	//middleware
+	server.Use(handlers.AuthMiddleware)
 	// routes
 	server.GET("/", handlers.IndexHandler)
 	server.GET("/register", handlers.RegisterHandler)
