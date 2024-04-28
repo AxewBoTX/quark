@@ -9,11 +9,11 @@ import (
 	"github.com/labstack/echo/v4"
 
 	"quark/client/lib"
-	"quark/client/web"
 )
 
 func AuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
+		TemplateRenderState := false
 		client := resty.New()
 		URL := strings.TrimSpace(c.Request().URL.String())
 		// check if session cookie is present
@@ -24,7 +24,7 @@ func AuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 				if strings.HasPrefix(URL, "/chat") { // protected
 					c.Redirect(http.StatusSeeOther, "/login")
 				} else { // not protected
-					web.RenderTemplTemplate(c, http.StatusOK)
+					TemplateRenderState = true
 				}
 			} else { // Present
 				res, user_fetch_err := client.R().Get(lib.SERVER_HOST + lib.SERVER_PORT + "/users/token/" + session_cookie.Value)
@@ -33,7 +33,7 @@ func AuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 					if strings.HasPrefix(URL, "/chat") { // protected
 						c.Redirect(http.StatusSeeOther, "/login")
 					} else { // not protected
-						web.RenderTemplTemplate(c, http.StatusOK)
+						TemplateRenderState = true
 					}
 				} else { // Valid Response
 					// check if user is on protected route
@@ -50,13 +50,14 @@ func AuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 							)
 						}
 						c.Set("session-data", user)
-						web.RenderTemplTemplate(c, http.StatusOK)
+						TemplateRenderState = true
 					} else { // not protected
 						c.Redirect(http.StatusSeeOther, "/chat")
 					}
 				}
 			}
 		}
+		c.Set("TemplateRenderState", TemplateRenderState)
 		return next(c)
 	}
 }
