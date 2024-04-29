@@ -76,6 +76,7 @@ func main() {
 
 	// route handlers
 	server.GET("/", handlers.IndexHandler)
+	server.GET("/ws", handlers.WebSocketHandler)
 	handlers.Users(server.Group("/users"), DB)
 	handlers.Messages(server.Group("/messages"), DB)
 

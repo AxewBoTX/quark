@@ -16,7 +16,7 @@ import (
 // database queries
 var (
 	MessageListFetchQuery string = `SELECT * FROM %s;`
-	MessageFetchQuery     string = `SELECT * FROM %s WHERE id = ? LIMIT 1;`
+	MessageFetchQuery_ID  string = `SELECT * FROM %s WHERE id = ? LIMIT 1;`
 	MessageInsertQuery    string = `INSERT INTO %s (id,user_id,body,created) VALUES(?,?,?,?);`
 	MessageDeleteQuery    string = `DELETE FROM %s WHERE id = ?;`
 )
@@ -68,7 +68,7 @@ func Messages(router *echo.Group, DB *sql.DB) {
 		var message lib.Message
 
 		// fetch database row && scan into struct
-		if row_fetch_err := DB.QueryRow(fmt.Sprintf(MessageFetchQuery, lib.MESSAGE_TABLE_NAME), messageID).Scan(
+		if row_fetch_err := DB.QueryRow(fmt.Sprintf(MessageFetchQuery_ID, lib.MESSAGE_TABLE_NAME), messageID).Scan(
 			&message.ID, &message.UserID, &message.Body, &message.Created,
 		); row_fetch_err != nil {
 			lib.ErrorWithColor(

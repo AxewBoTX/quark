@@ -6,6 +6,23 @@ import (
 
 templ Chat_Page() {
 	@components.Base_HTML() {
-		<h1 class="text-2xl">Chat Page</h1>
+		<script>
+	let socket;
+	const connectWebSocket = () => {
+		socket = new WebSocket("ws://localhost:8080/ws")
+	}
+	window.onload = function () {
+		connectWebSocket();
+	}
+	window.onbeforeunload = function () {
+		socket.close()
+	}
+</script>
+		<div class="fixed left-0 right-0 bottom-0 flex items-center justify-center">
+			<form class="p-3 flex items-center justify-center gap-3 w-full max-w-[800px]">
+				<input id="MessageInput" name="MessageInput" placeholder="Message" class="input input-bordered w-full"/>
+				<button type="submit" class="btn btn-primary btn-wide max-w-[100px]">Send</button>
+			</form>
+		</div>
 	}
 }

@@ -33,7 +33,7 @@ func Chat_Page() templ.Component {
 				templ_7745c5c3_Buffer = templ.GetBuffer()
 				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h1 class=\"text-2xl\">Chat Page</h1>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<script>\n\tlet socket;\n\tconst connectWebSocket = () => {\n\t\tsocket = new WebSocket(\"ws://localhost:8080/ws\")\n\t}\n\twindow.onload = function () {\n\t\tconnectWebSocket();\n\t}\n\twindow.onbeforeunload = function () {\n\t\tsocket.close()\n\t}\n</script> <div class=\"fixed left-0 right-0 bottom-0 flex items-center justify-center\"><form class=\"p-3 flex items-center justify-center gap-3 w-full max-w-[800px]\"><input id=\"MessageInput\" name=\"MessageInput\" placeholder=\"Message\" class=\"input input-bordered w-full\"> <button type=\"submit\" class=\"btn btn-primary btn-wide max-w-[100px]\">Send</button></form></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

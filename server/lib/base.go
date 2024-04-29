@@ -13,6 +13,7 @@ const (
 	SRC_FOLDER_PATH          string = "base_src"
 	CURRENT_CONFIG_FILE_PATH string = SRC_FOLDER_PATH + "/" + "config.toml"
 	DEFAULT_CONFIG_FILE_PATH string = "public/lib/config.toml"
+	SESSION_COOKIE_NAME      string = "usr_session"
 	COLOR_RED                string = "#f38ba8"
 	COLOR_BLUE               string = "#89b4fa"
 	COLOR_GREEN              string = "#a6e3a1"

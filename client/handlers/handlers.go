@@ -5,7 +5,6 @@ import (
 
 	"github.com/labstack/echo/v4"
 
-	"quark/client/lib"
 	"quark/client/web"
 )
 
@@ -43,14 +42,14 @@ func LoginHandler(c echo.Context) error {
 func ChatHandler(c echo.Context) error {
 	TemplateRenderState := c.Get("TemplateRenderState")
 	if TemplateRenderState == true {
-		lib.InfoWithColor(
-			"INFO",
-			"0",
-			lib.COLOR_BLUE,
-			"Session Data",
-			"Value",
-			c.Get("session-data"),
-		)
+		// lib.InfoWithColor(
+		// 	"INFO",
+		// 	"0",
+		// 	lib.COLOR_BLUE,
+		// 	"Session Data",
+		// 	"Value",
+		// 	c.Get("session-data"),
+		// )
 		return web.RenderTemplTemplate(c, http.StatusOK)
 	} else {
 		return nil
