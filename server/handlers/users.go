@@ -86,6 +86,7 @@ func Users(router *echo.Group, DB *sql.DB) {
 			)
 			return c.String(http.StatusInternalServerError, "Database Row Fetch Error")
 		}
+		user.PasswordHash = ""
 		return c.JSON(http.StatusOK, user)
 	})
 

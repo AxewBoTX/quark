@@ -29,6 +29,13 @@ func AuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 			} else { // Present
 				res, user_fetch_err := client.R().Get(lib.SERVER_HOST + lib.SERVER_PORT + "/users/token/" + session_cookie.Value)
 				if user_fetch_err != nil || res.StatusCode() == http.StatusInternalServerError { // Not A Valid Response
+					// remove the session-cookie
+					c.SetCookie(&http.Cookie{
+						Name:   lib.SESSION_COOKIE_NAME,
+						Value:  "",
+						Path:   "/",
+						MaxAge: -1,
+					})
 					// Check if user is on protected route
 					if strings.HasPrefix(URL, "/chat") { // protected
 						c.Redirect(http.StatusSeeOther, "/login")

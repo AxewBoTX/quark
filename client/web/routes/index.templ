@@ -6,6 +6,9 @@ import (
 
 templ Home_Page() {
 	@components.Base_HTML() {
+		<script>
+	console.log(ctx.Value("username").(string))
+</script>
 		<h1 class="text-3xl">Home Page</h1>
 	}
 }

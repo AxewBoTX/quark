@@ -15,6 +15,4 @@ tasks:
     - go build -o $BUILD_DIR/$BINARY_NAME .
   clean:
     - rm -rf $BUILD_DIR
-  clean-all:
-    - task: clean
     - rm -rf $SRC_DIR

@@ -1,18 +1,25 @@
 package handlers
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
 
+	"quark/client/lib"
 	"quark/client/web"
+	"quark/client/web/routes"
 )
 
 // index(/) route handler
 func IndexHandler(c echo.Context) error {
 	TemplateRenderState := c.Get("TemplateRenderState")
 	if TemplateRenderState == true {
-		return web.RenderTemplTemplate(c, http.StatusOK)
+		c.SetRequest(
+			c.Request().
+				WithContext(context.WithValue(c.Request().Context(), "username", "AxewBoTX")),
+		)
+		return web.RenderTemplTemplate(c, http.StatusOK, routes.Home_Page())
 	} else {
 		return nil
 	}
@@ -22,7 +29,7 @@ func IndexHandler(c echo.Context) error {
 func RegisterHandler(c echo.Context) error {
 	TemplateRenderState := c.Get("TemplateRenderState")
 	if TemplateRenderState == true {
-		return web.RenderTemplTemplate(c, http.StatusOK)
+		return web.RenderTemplTemplate(c, http.StatusOK, routes.Login_Page())
 	} else {
 		return nil
 	}
@@ -32,7 +39,7 @@ func RegisterHandler(c echo.Context) error {
 func LoginHandler(c echo.Context) error {
 	TemplateRenderState := c.Get("TemplateRenderState")
 	if TemplateRenderState == true {
-		return web.RenderTemplTemplate(c, http.StatusOK)
+		return web.RenderTemplTemplate(c, http.StatusOK, routes.Login_Page())
 	} else {
 		return nil
 	}
@@ -42,15 +49,15 @@ func LoginHandler(c echo.Context) error {
 func ChatHandler(c echo.Context) error {
 	TemplateRenderState := c.Get("TemplateRenderState")
 	if TemplateRenderState == true {
-		// lib.InfoWithColor(
-		// 	"INFO",
-		// 	"0",
-		// 	lib.COLOR_BLUE,
-		// 	"Session Data",
-		// 	"Value",
-		// 	c.Get("session-data"),
-		// )
-		return web.RenderTemplTemplate(c, http.StatusOK)
+		lib.InfoWithColor(
+			"INFO",
+			"0",
+			lib.COLOR_BLUE,
+			"Session Data",
+			"Value",
+			c.Get("session-data"),
+		)
+		return web.RenderTemplTemplate(c, http.StatusOK, routes.Chat_Page())
 	} else {
 		return nil
 	}
