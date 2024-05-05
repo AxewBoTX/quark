@@ -7,22 +7,31 @@ import (
 templ Chat_Page() {
 	@components.Base_HTML() {
 		<script>
-	let socket;
-	const connectWebSocket = () => {
-		socket = new WebSocket("ws://localhost:8080/ws")
-	}
-	window.onload = function () {
-		connectWebSocket();
-	}
-	window.onbeforeunload = function () {
-		socket.close()
-	}
+	document.body.addEventListener("htmx:wsAfterMessage", (event) => {
+		const messageList = document.getElementById("MessageList")
+		messageList.insertAdjacentHTML("beforeend", `<p>${event.detail.message}</p>`)
+	})
+	document.body.addEventListener("htmx:wsBeforeSend", (event) => {
+		event.preventDefault()
+		const message = {...JSON.parse(event.detail.message), username: "AxewBoTX"}
+		const socket = event.detail.socketWrapper
+		socket.send(JSON.stringify(message))
+	})
 </script>
-		<div class="fixed left-0 right-0 bottom-0 flex items-center justify-center">
-			<form class="p-3 flex items-center justify-center gap-3 w-full max-w-[800px]">
-				<input id="MessageInput" name="MessageInput" placeholder="Message" class="input input-bordered w-full"/>
-				<button type="submit" class="btn btn-primary btn-wide max-w-[100px]">Send</button>
-			</form>
+		<div hx-ext="ws" ws-connect={ ctx.Value("realtime_server_addr").(string) }>
+			<div id="MessageList" class="flex flex-col w-full gap-[25px]"></div>
+			<div class="fixed left-0 right-0 bottom-0 flex items-center justify-center">
+				<form ws-send class="p-3 flex items-center justify-center gap-3 w-full max-w-[800px]">
+					<input
+						id="MessageInput"
+						name="body"
+						placeholder="Message"
+						autocomplete="off"
+						class="input input-bordered w-full"
+					/>
+					<button type="submit" class="btn btn-primary btn-wide max-w-[100px]">Send</button>
+				</form>
+			</div>
 		</div>
 	}
 }

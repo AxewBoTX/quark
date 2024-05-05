@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"errors"
+	"io"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -15,14 +17,38 @@ func IndexHandler(c echo.Context) error {
 }
 
 func WebSocketHandler(c echo.Context) error {
-	websocket.Handler(func(c *websocket.Conn) {
-		lib.InfoWithColor("INFO", "0", lib.COLOR_BLUE, "New Connection!")
-		client_session_cookie, client_session_cookie_get_err := c.Request().
-			Cookie(lib.SESSION_COOKIE_NAME)
-		if client_session_cookie_get_err != nil {
-			lib.ErrorWithColor("ERROR", "0", lib.COLOR_RED, "Failed To Fetch Client Session Cookie")
-		} else {
-			lib.InfoWithColor("INFO", "0", lib.COLOR_BLUE, "Session Cookie Found!", "Value", client_session_cookie.Value)
+	websocket.Handler(func(conn *websocket.Conn) {
+		client_addr := c.Request().RemoteAddr
+		lib.Clients[client_addr] = conn
+
+		lib.InfoWithColor(
+			"JOIN",
+			"0",
+			lib.COLOR_GREEN,
+			"Client joined the server",
+			"Address",
+			client_addr,
+		)
+
+		defer func() {
+			delete(lib.Clients, client_addr)
+			conn.Close()
+		}()
+
+		for {
+			var msg lib.Message
+			if message_read_err := websocket.JSON.Receive(conn, &msg); message_read_err != nil {
+				if errors.Is(message_read_err, io.EOF) {
+					lib.DisconnectClient(client_addr)
+					break
+				} else {
+					lib.DisconnectClient(client_addr)
+					lib.ErrorWithColor("ERROR", "0", lib.COLOR_RED, "Failed To Read Client Message", "Error", message_read_err)
+					break
+				}
+			}
+			lib.MSG_Channel <- msg
+			lib.InfoWithColor("MSG", "0", lib.COLOR_BLUE, client_addr, "Message", msg.Body)
 		}
 	}).ServeHTTP(c.Response(), c.Request())
 	return nil

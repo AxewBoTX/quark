@@ -73,7 +73,7 @@ func AuthRegisterHandler(c echo.Context) error {
 			"passwordHash":  passwordHash,
 			"userAuthToken": userAuthToken,
 		}).
-		Post(lib.SERVER_HOST + lib.SERVER_PORT + "/users/")
+		Post("http://" + lib.SERVER_HOST + lib.SERVER_PORT + "/users/")
 	if user_register_err != nil {
 		lib.ErrorWithColor(
 			"ERROR",
@@ -128,7 +128,7 @@ func AuthLoginHandler(c echo.Context) error {
 
 	// fetch user data from server
 	res, user_login_err := auth_client.R().
-		Get(lib.SERVER_HOST + lib.SERVER_PORT + "/users/" + username)
+		Get("http://" + lib.SERVER_HOST + lib.SERVER_PORT + "/users/" + username)
 	if user_login_err != nil {
 		lib.ErrorWithColor(
 			"ERROR",
@@ -167,7 +167,7 @@ func AuthLoginHandler(c echo.Context) error {
 			SetBody(map[string]interface{}{
 				"userAuthToken": uuid.New().String(),
 			}).
-			Patch(lib.SERVER_HOST + lib.SERVER_PORT + "/users/" + user.ID)
+			Patch("http://" + lib.SERVER_HOST + lib.SERVER_PORT + "/users/" + user.ID)
 		if user_auth_token_update_err != nil {
 			lib.ErrorWithColor(
 				"ERROR",

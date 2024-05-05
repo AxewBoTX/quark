@@ -28,14 +28,15 @@ var (
 		username TEXT UNIQUE,
 		passwordHash TEXT,
 		userAuthToken TEXT UNIQUE,
-		created TEXT,
-		updated TEXT
+		created INTEGER,
+		updated INTEGER
 	);`
 	MessageTableCreateQuery = `CREATE TABLE IF NOT EXISTS %s(
 		id TEXT PRIMARY KEY,
 		user_id TEXT,
+		username TEXT,
 		body TEXT,
-		created TEXT,
+		created INTEGER,
 		FOREIGN KEY(user_id) REFERENCES %s(id) ON DELETE CASCADE
 	);`
 )
@@ -66,7 +67,7 @@ func HandleMigrations(DB *sql.DB) {
 
 // generate SQL UPDATE query based on User struct input
 func GenerateSQLUpdateQuery(user User) string {
-	current_time := time.Now().Format(time.RFC3339)
+	current_time := time.Now().Unix()
 	var updateFields []string
 	if user.Username != "" {
 		updateFields = append(updateFields, fmt.Sprintf(`username='%s'`, user.Username))
@@ -80,7 +81,7 @@ func GenerateSQLUpdateQuery(user User) string {
 	if len(updateFields) == 0 {
 		return ""
 	}
-	updateFields = append(updateFields, fmt.Sprintf(`updated='%s'`, current_time))
+	updateFields = append(updateFields, fmt.Sprintf(`updated='%d'`, current_time))
 	setClause := strings.Join(updateFields, ", ")
 	query := fmt.Sprintf("UPDATE %s SET %s WHERE ID='%s';", USER_TABLE_NAME, setClause, user.ID)
 	return query

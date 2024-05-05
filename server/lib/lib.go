@@ -2,11 +2,37 @@ package lib
 
 import (
 	"os"
+
+	"golang.org/x/net/websocket"
 )
 
 var DefaultConfig Config
 
 var CurrentConfig Config
+
+func Broadcaster() {
+	for {
+		select {
+		case data := <-MSG_Channel:
+			for _, client := range Clients {
+				if message_broadcast_err := websocket.JSON.Send(client, data); message_broadcast_err != nil {
+					ErrorWithColor(
+						"ERROR",
+						"0",
+						COLOR_RED,
+						"Failed To Broadcast Message",
+						message_broadcast_err,
+					)
+				}
+			}
+		}
+	}
+}
+
+func DisconnectClient(client_addr string) {
+	delete(Clients, client_addr)
+	InfoWithColor("LEAVE", "0", COLOR_YELLOW, "Client left the server", "Address", client_addr)
+}
 
 func Prepare() {
 	if CheckFolderExists(SRC_FOLDER_PATH) == false {

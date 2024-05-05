@@ -33,7 +33,20 @@ func Chat_Page() templ.Component {
 				templ_7745c5c3_Buffer = templ.GetBuffer()
 				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<script>\n\tlet socket;\n\tconst connectWebSocket = () => {\n\t\tsocket = new WebSocket(\"ws://localhost:8080/ws\")\n\t}\n\twindow.onload = function () {\n\t\tconnectWebSocket();\n\t}\n\twindow.onbeforeunload = function () {\n\t\tsocket.close()\n\t}\n</script> <div class=\"fixed left-0 right-0 bottom-0 flex items-center justify-center\"><form class=\"p-3 flex items-center justify-center gap-3 w-full max-w-[800px]\"><input id=\"MessageInput\" name=\"MessageInput\" placeholder=\"Message\" class=\"input input-bordered w-full\"> <button type=\"submit\" class=\"btn btn-primary btn-wide max-w-[100px]\">Send</button></form></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<script>\n\tdocument.body.addEventListener(\"htmx:wsAfterMessage\", (event) => {\n\t\tconst messageList = document.getElementById(\"MessageList\")\n\t\tmessageList.insertAdjacentHTML(\"beforeend\", `<p>${event.detail.message}</p>`)\n\t})\n\tdocument.body.addEventListener(\"htmx:wsBeforeSend\", (event) => {\n\t\tevent.preventDefault()\n\t\tconst message = {...JSON.parse(event.detail.message), username: \"AxewBoTX\"}\n\t\tconst socket = event.detail.socketWrapper\n\t\tsocket.send(JSON.stringify(message))\n\t})\n</script> <div hx-ext=\"ws\" ws-connect=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var3 string
+			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(ctx.Value("realtime_server_addr").(string))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/routes/chat.templ`, Line: 21, Col: 74}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><div id=\"MessageList\" class=\"flex flex-col w-full gap-[25px]\"></div><div class=\"fixed left-0 right-0 bottom-0 flex items-center justify-center\"><form ws-send class=\"p-3 flex items-center justify-center gap-3 w-full max-w-[800px]\"><input id=\"MessageInput\" name=\"body\" placeholder=\"Message\" autocomplete=\"off\" class=\"input input-bordered w-full\"> <button type=\"submit\" class=\"btn btn-primary btn-wide max-w-[100px]\">Send</button></form></div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

@@ -117,7 +117,7 @@ func Users(router *echo.Group, DB *sql.DB) {
 
 	// (/users/) route POST request handler
 	router.POST("/", func(c echo.Context) error {
-		current_time := time.Now().Format(time.RFC3339)
+		current_time := time.Now().Unix()
 		var req_user lib.User
 
 		// bind request data to struct

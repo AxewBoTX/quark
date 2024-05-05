@@ -65,6 +65,8 @@ func main() {
 	server.HideBanner = true
 	server.HidePort = true
 
+	go lib.Broadcaster()
+
 	lib.InfoWithColor(
 		"INFO",
 		"0",

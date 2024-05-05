@@ -27,7 +27,7 @@ func AuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 					TemplateRenderState = true
 				}
 			} else { // Present
-				res, user_fetch_err := client.R().Get(lib.SERVER_HOST + lib.SERVER_PORT + "/users/token/" + session_cookie.Value)
+				res, user_fetch_err := client.R().Get("http://" + lib.SERVER_HOST + lib.SERVER_PORT + "/users/token/" + session_cookie.Value)
 				if user_fetch_err != nil || res.StatusCode() == http.StatusInternalServerError { // Not A Valid Response
 					// remove the session-cookie
 					c.SetCookie(&http.Cookie{

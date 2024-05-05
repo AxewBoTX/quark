@@ -1,4 +1,4 @@
 port = "3000"
-host = "http://localhost"
+host = "localhost"
 server_port = "8080"
-server_host = "http://localhost"
+server_host = "localhost"

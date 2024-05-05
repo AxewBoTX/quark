@@ -6,6 +6,7 @@ import (
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/log"
 	"github.com/pelletier/go-toml"
+	"golang.org/x/net/websocket"
 )
 
 // constant declarations
@@ -30,6 +31,8 @@ var (
 	DB_FILE_PATH       string
 	USER_TABLE_NAME    string
 	MESSAGE_TABLE_NAME string
+	Clients            = make(map[string]*websocket.Conn)
+	MSG_Channel        = make(chan Message)
 )
 
 // type definitions
@@ -46,14 +49,16 @@ type (
 		Username      string `json:"username"`
 		PasswordHash  string `json:"passwordHash"`
 		UserAuthToken string `json:"userAuthToken"`
-		Created       string `json:"created"`
-		Updated       string `json:"updated"`
+		Created       int64  `json:"created"`
+		Updated       int64  `json:"updated"`
 	}
 	Message struct {
-		ID      string `json:"id"`
-		UserID  string `json:"user_id"`
-		Body    string `json:"body"`
-		Created string `json:"created"`
+		ID       string `json:"id"`
+		UserID   string `json:"user_id"`
+		Username string `json:"username"`
+		Body     string `json:"body"`
+		Type     string `json:"type"`
+		Created  int64  `json:"created"`
 	}
 )
 

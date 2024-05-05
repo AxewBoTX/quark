@@ -1,5 +1,5 @@
 port = "8080"
-host = "http://localhost"
+host = "localhost"
 database_file_name = "base.db"
 user_table_name = "usr_base"
 message_table_name = "msg_base"

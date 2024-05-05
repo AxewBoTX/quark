@@ -86,7 +86,7 @@ func Messages(router *echo.Group, DB *sql.DB) {
 
 	// (/messages/) route POST request handler
 	router.POST("/", func(c echo.Context) error {
-		current_time := time.Now().Format(time.RFC3339)
+		current_time := time.Now().Unix()
 		var req_message lib.Message
 
 		// bind request data
