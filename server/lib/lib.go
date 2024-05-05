@@ -14,6 +14,8 @@ func Broadcaster() {
 	for {
 		select {
 		case data := <-MSG_Channel:
+			data.Log()
+			data.Write()
 			for _, client := range Clients {
 				if message_broadcast_err := websocket.JSON.Send(client, data); message_broadcast_err != nil {
 					ErrorWithColor(
@@ -29,9 +31,9 @@ func Broadcaster() {
 	}
 }
 
-func DisconnectClient(client_addr string) {
-	delete(Clients, client_addr)
-	InfoWithColor("LEAVE", "0", COLOR_YELLOW, "Client left the server", "Address", client_addr)
+func DisconnectClient(user User) {
+	delete(Clients, user.ID)
+	MSG_Channel <- Message{UserID: user.ID, Username: user.Username, Type: "LEAVE"}
 }
 
 func Prepare() {

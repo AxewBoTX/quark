@@ -13,7 +13,7 @@ templ Chat_Page() {
 	})
 	document.body.addEventListener("htmx:wsBeforeSend", (event) => {
 		event.preventDefault()
-		const message = {...JSON.parse(event.detail.message), username: "AxewBoTX"}
+		const message = {...JSON.parse(event.detail.message)}
 		const socket = event.detail.socketWrapper
 		socket.send(JSON.stringify(message))
 	})

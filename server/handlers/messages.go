@@ -17,7 +17,7 @@ import (
 var (
 	MessageListFetchQuery string = `SELECT * FROM %s;`
 	MessageFetchQuery_ID  string = `SELECT * FROM %s WHERE id = ? LIMIT 1;`
-	MessageInsertQuery    string = `INSERT INTO %s (id,user_id,body,created) VALUES(?,?,?,?);`
+	MessageInsertQuery    string = `INSERT INTO %s (id,user_id,username,body,type,created) VALUES(?,?,?,?,?,?);`
 	MessageDeleteQuery    string = `DELETE FROM %s WHERE id = ?;`
 )
 
@@ -45,7 +45,7 @@ func Messages(router *echo.Group, DB *sql.DB) {
 		var messages []lib.Message
 		for rows.Next() {
 			var message lib.Message
-			if row_scan_err := rows.Scan(&message.ID, &message.UserID, &message.Body, &message.Created); row_scan_err != nil {
+			if row_scan_err := rows.Scan(&message.ID, &message.UserID, &message.Username, &message.Body, &message.Type, &message.Created); row_scan_err != nil {
 				lib.ErrorWithColor(
 					"ERROR",
 					"0",
@@ -106,7 +106,7 @@ func Messages(router *echo.Group, DB *sql.DB) {
 
 		// insert database row
 		if _, row_create_err := DB.Exec(fmt.Sprintf(MessageInsertQuery, lib.MESSAGE_TABLE_NAME),
-			req_message.ID, req_message.UserID, req_message.Body, current_time,
+			req_message.ID, req_message.UserID, req_message.Username, req_message.Body, req_message.Type, current_time,
 		); row_create_err != nil {
 			lib.ErrorWithColor(
 				"ERROR",

@@ -5,6 +5,7 @@ import (
 
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/log"
+	"github.com/go-resty/resty/v2"
 	"github.com/pelletier/go-toml"
 	"golang.org/x/net/websocket"
 )
@@ -66,6 +67,54 @@ type (
 func (c *Config) LoadConfig(content []byte) {
 	if config_parse_err := toml.Unmarshal(content, c); config_parse_err != nil {
 		FatalWithColor("FATAL", "0", COLOR_RED, "Failed to parse config", "Error", config_parse_err)
+	}
+}
+
+// log message to console
+func (msg *Message) Log() {
+	if msg.Type == "JOIN" {
+		InfoWithColor(
+			"JOIN",
+			"0",
+			COLOR_GREEN,
+			msg.Username+" joined the server!",
+			"User",
+			map[string]interface{}{"UserID": msg.UserID, "Username": msg.Username},
+		)
+	} else if msg.Type == "MSG" {
+		InfoWithColor("MSG", "0", COLOR_BLUE, map[string]interface{}{"UserID": msg.UserID, "Username": msg.Username}, "Body", msg.Body)
+	} else if msg.Type == "LEAVE" {
+		InfoWithColor(
+			"LEAVE",
+			"0",
+			COLOR_YELLOW,
+			msg.Username+" left the server!",
+			"User",
+			map[string]interface{}{"UserID": msg.UserID, "Username": msg.Username},
+		)
+	}
+}
+
+// write message to database
+func (msg *Message) Write() {
+	rest_client := resty.New()
+	_, message_write_err := rest_client.R().
+		SetHeader("Content-Type", "application/json").
+		SetBody(map[string]interface{}{
+			"user_id":  msg.UserID,
+			"username": msg.Username,
+			"body":     msg.Body,
+			"type":     msg.Type,
+		}).Post("http://" + HOST + PORT + "/messages/")
+	if message_write_err != nil {
+		ErrorWithColor(
+			"ERROR",
+			"0",
+			COLOR_RED,
+			"Failed To Write Message To Database",
+			"Error",
+			message_write_err,
+		)
 	}
 }
 

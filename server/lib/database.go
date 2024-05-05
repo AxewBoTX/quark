@@ -36,6 +36,7 @@ var (
 		user_id TEXT,
 		username TEXT,
 		body TEXT,
+		type TEXT,
 		created INTEGER,
 		FOREIGN KEY(user_id) REFERENCES %s(id) ON DELETE CASCADE
 	);`

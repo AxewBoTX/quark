@@ -33,7 +33,7 @@ func Chat_Page() templ.Component {
 				templ_7745c5c3_Buffer = templ.GetBuffer()
 				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<script>\n\tdocument.body.addEventListener(\"htmx:wsAfterMessage\", (event) => {\n\t\tconst messageList = document.getElementById(\"MessageList\")\n\t\tmessageList.insertAdjacentHTML(\"beforeend\", `<p>${event.detail.message}</p>`)\n\t})\n\tdocument.body.addEventListener(\"htmx:wsBeforeSend\", (event) => {\n\t\tevent.preventDefault()\n\t\tconst message = {...JSON.parse(event.detail.message), username: \"AxewBoTX\"}\n\t\tconst socket = event.detail.socketWrapper\n\t\tsocket.send(JSON.stringify(message))\n\t})\n</script> <div hx-ext=\"ws\" ws-connect=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<script>\n\tdocument.body.addEventListener(\"htmx:wsAfterMessage\", (event) => {\n\t\tconst messageList = document.getElementById(\"MessageList\")\n\t\tmessageList.insertAdjacentHTML(\"beforeend\", `<p>${event.detail.message}</p>`)\n\t})\n\tdocument.body.addEventListener(\"htmx:wsBeforeSend\", (event) => {\n\t\tevent.preventDefault()\n\t\tconst message = {...JSON.parse(event.detail.message)}\n\t\tconst socket = event.detail.socketWrapper\n\t\tsocket.send(JSON.stringify(message))\n\t})\n</script> <div hx-ext=\"ws\" ws-connect=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
