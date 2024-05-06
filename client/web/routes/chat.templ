@@ -7,19 +7,39 @@ import (
 templ Chat_Page() {
 	@components.Base_HTML() {
 		<script>
-	document.body.addEventListener("htmx:wsAfterMessage", (event) => {
-		const messageList = document.getElementById("MessageList")
-		messageList.insertAdjacentHTML("beforeend", `<p>${event.detail.message}</p>`)
-	})
 	document.body.addEventListener("htmx:wsBeforeSend", (event) => {
 		event.preventDefault()
 		const message = {...JSON.parse(event.detail.message)}
 		const socket = event.detail.socketWrapper
 		socket.send(JSON.stringify(message))
 	})
+	document.body.addEventListener("htmx:wsAfterMessage", (event) => {
+		const messageList = document.getElementById("MessageList")
+		const message = JSON.parse(event.detail.message)
+		switch (message.type) {
+			case "JOIN":
+				messageList.insertAdjacentHTML("beforeend", `<div class="flex justify-center text-semibold">
+					${message.username + " joined the server"}
+				</div>`)
+				break;
+			case "MSG":
+				messageList.insertAdjacentHTML("beforeend", `<div class="flex flex-col items-start">
+				<p class="text-lg font-semibold bg-secondary text-secondary-content w-fit pl-1 pr-2 rounded-tl-lg rounded-tr-lg" >${message.username}</p>
+				<p class="bg-accent text-accent-content rounded-tl-none rounded-bl-badge rounded-r-badge px-4 py-1 max-w-[400px]">${message.body}</p>
+		</div>`)
+				break;
+			case "LEAVE":
+				messageList.insertAdjacentHTML("beforeend", `<div class="flex justify-center text-semibold">
+					${message.username + " left the server"}
+				</div>`)
+				break;
+		}
+	})
 </script>
 		<div hx-ext="ws" ws-connect={ ctx.Value("realtime_server_addr").(string) }>
-			<div id="MessageList" class="flex flex-col w-full gap-[25px]"></div>
+			<div class="flex justify-center w-full">
+				<div id="MessageList" class="flex flex-col w-full gap-[25px] p-3 max-w-[1200px]"></div>
+			</div>
 			<div class="fixed left-0 right-0 bottom-0 flex items-center justify-center">
 				<form ws-send class="p-3 flex items-center justify-center gap-3 w-full max-w-[800px]">
 					<input
