@@ -4,63 +4,8 @@ import (
 	"quark/client/web/components"
 )
 
-var messages = []map[string]interface{}{
-	{"username": "axewbotx", "body": "h", "type": "MSG"},
-	{"username": "lovedeep123", "body": "How are you?", "type": "MSG"},
-	{"username": "lovedeep123", "body": "", "type": "JOIN"},
-	{"username": "loficoochie", "body": "Greetings from Go!", "type": "MSG"},
-	{"username": "shitposter", "body": `How are you doing this fine evening, I am personally very good bro! Now I really
-want to
-know your health and your current financial condition because I sir am the one that will help you get out of this
-slump!`, "type": "MSG"},
-	{"username": "shitposter", "body": "", "type": "LEAVE"},
-	{"username": "loficoochie", "body": "Greetings from Go!", "type": "MSG"},
-}
-
 templ Home_Page() {
 	@components.Base_HTML() {
-		<div>
-			<div class="flex justify-center w-full">
-				<div id="MessageList" class="flex flex-col w-full gap-[25px] p-3 max-w-[1200px]">
-					for _,item := range messages {
-						switch item["type"].(string) {
-							case "JOIN":
-								<div class="flex justify-center text-semibold">
-									{ item["username"].(string) + " joined the server!" }
-								</div>
-							case "MSG":
-								<div class="flex flex-col items-start">
-									<p
-										class="text-lg font-semibold bg-secondary text-secondary-content w-fit pl-1 pr-2 rounded-tl-lg rounded-tr-lg"
-									>
-										{ item["username"].(string) }
-									</p>
-									<p
-										class="bg-accent text-accent-content rounded-tl-none rounded-bl-badge rounded-r-badge px-4 py-1 max-w-[400px]"
-									>
-										{ item["body"].(string) }
-									</p>
-								</div>
-							case "LEAVE":
-								<div class="flex justify-center text-semibold">
-									{ item["username"].(string) + " left the server!" }
-								</div>
-						}
-					}
-				</div>
-			</div>
-			<div class="fixed left-0 right-0 bottom-0 flex items-center justify-center">
-				<form class="p-3 flex items-center justify-center gap-3 w-full max-w-[800px]">
-					<input
-						id="MessageInput"
-						name="body"
-						placeholder="Message"
-						autocomplete="off"
-						class="input input-bordered w-full"
-					/>
-					<button type="submit" class="btn btn-primary btn-wide max-w-[100px]">Send</button>
-				</form>
-			</div>
-		</div>
+		<div></div>
 	}
 }

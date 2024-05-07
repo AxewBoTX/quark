@@ -25,26 +25,29 @@ templ Login_Page() {
 	})
 	// page script ends
 </script>
-		<div class="flex flex-col items-center mt-[50px] gap-[20px]">
-			<h1 class="text-4xl">Login</h1>
+		<div class="flex flex-col items-center mt-[150px] gap-[20px]">
+			<div class="flex flex-col items-center gap-[15px]">
+				<h1 class="text-4xl">Login</h1>
+				<p>Don't have an account? <a href="/register" class="link link-primary">Register</a></p>
+			</div>
 			<form hx-post="/auth/login" hx-swap="none" name="loginForm" class="flex flex-col items-center gap-[15px] w-full">
 				<input
 					name="username"
 					placeholder="Username"
 					autocomplete="off"
-					class="input input-bordered w-full max-w-[250px]"
+					class="input border-neutral focus:outline-none focus:border-primary placeholder-base-200 w-full max-w-[250px]"
 				/>
 				<input
 					name="password"
 					placeholder="Password"
 					autocomplete="off"
-					class="input input-bordered w-full max-w-[250px]"
+					class="input border-neutral focus:outline-none focus:border-primary placeholder-base-200 w-full max-w-[250px]"
 				/>
 				<button
 					hx-on:click="handleLoginFormSubmit()"
 					id="loginButton"
 					type="submit"
-					class="btn btn-accent w-full max-w-[180px]"
+					class="btn btn-primary w-full max-w-[180px]"
 				>Login</button>
 			</form>
 		</div>

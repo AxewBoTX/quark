@@ -38,6 +38,31 @@ templ Chat_Page() {
 	})
 </script>
 		<div hx-ext="ws" ws-connect={ ctx.Value("realtime_server_addr").(string) }>
+			<div class="fixed top-0 right-0 p-2">
+				<div class="dropdown dropdown-end">
+					<svg
+						tabindex="0"
+						role="button"
+						xmlns="http://www.w3.org/2000/svg"
+						class="stroke-base-200 shrink-0 h-8 w-8"
+						fill="none"
+						viewBox="0 0 24 24"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z"
+						></path>
+					</svg>
+					<ul class="p-2 mr-[15px] shadow menu dropdown-content z-[1] bg-info text-info-content rounded-md w-fit">
+						<button
+							class="btn btn-ghost btn-sm btn-wide max-w-[80px]"
+							hx-swap="none"
+							hx-get="/auth/logout"
+						>Logout</button>
+					</ul>
+				</div>
+			</div>
 			<div class="flex justify-center w-full mb-[120px]">
 				<div id="MessageList" class="flex flex-col w-full gap-[25px] p-3 max-w-[1200px]"></div>
 			</div>
@@ -48,7 +73,7 @@ templ Chat_Page() {
 						name="body"
 						placeholder="Message"
 						autocomplete="off"
-						class="input input-bordered w-full"
+						class="input border-neutral focus:outline-none focus:border-primary placeholder-base-200 w-full max-w-[250px]"
 					/>
 					<button type="submit" class="btn btn-primary btn-wide max-w-[100px]">Send</button>
 				</form>

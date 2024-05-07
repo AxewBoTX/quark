@@ -28,14 +28,14 @@ export default {
           "base-100": "#14140C", //background
           "base-content": "#E6E2D5", //onBackground
           surface: "#14140C", //surface
-          onSurface: "#E6E2D5", //onSurface
+          "info-content": "#E6E2D5", //onSurface
           surfaceVariant: "#49473A", //surfaceVariant
-          onSurfaceVariant: "#CAC7B5", //onSurfaceVariant
-          outline: "#949181", //outline
+          "base-200": "#CAC7B5", //onSurfaceVariant
+          neutral: "#949181", //outline
           outlineVariant: "#49473A", //outlineVariant
           shadow: "#000000", //shadow
           scrim: "#000000", //scrim
-          inverseSurface: "#E6E2D5", //inverseSurface
+          "base-300": "#E6E2D5", //inverseSurface
           inverseOnSurface: "#323128", //inverseOnSurface
           inversePrimary: "#646116", //inversePrimary
           primaryFixed: "#EBE68D", //primaryFixed
@@ -54,7 +54,7 @@ export default {
           surfaceBright: "#3B3930", //surfaceBright
           surfaceContainerLowest: "#0F0E07", //surfaceContainerLowest
           surfaceContainerLow: "#1D1C14", //surfaceContainerLow
-          surfaceContainer: "#212018", //surfaceContainer
+          info: "#212018", //surfaceContainer
           surfaceContainerHigh: "#2B2A22", //surfaceContainerHigh
           surfaceContainerHighest: "#36352C", //surfaceContainerHighest
         },
