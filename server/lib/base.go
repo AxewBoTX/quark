@@ -68,9 +68,9 @@ func (c *Config) LoadConfig(content []byte) {
 	}
 }
 
-// log message to console
+// log message to console according to message type
 func (msg *Message) Log() {
-	if msg.Type == "JOIN" {
+	if msg.Type == "JOIN" { // JOIN Message type
 		InfoWithColor(
 			"JOIN",
 			"0",
@@ -79,9 +79,9 @@ func (msg *Message) Log() {
 			"User",
 			map[string]interface{}{"UserID": msg.UserID, "Username": msg.Username},
 		)
-	} else if msg.Type == "MSG" {
+	} else if msg.Type == "MSG" { // MSG Message type
 		InfoWithColor("MSG", "0", COLOR_BLUE, map[string]interface{}{"UserID": msg.UserID, "Username": msg.Username}, "Body", msg.Body)
-	} else if msg.Type == "LEAVE" {
+	} else if msg.Type == "LEAVE" { // LEAVE Message type
 		InfoWithColor(
 			"LEAVE",
 			"0",

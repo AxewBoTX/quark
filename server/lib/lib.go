@@ -10,6 +10,7 @@ var DefaultConfig Config
 
 var CurrentConfig Config
 
+// broadcast messages to all the connected clients
 func Broadcaster() {
 	for {
 		select {
@@ -30,11 +31,13 @@ func Broadcaster() {
 	}
 }
 
+// disconnect client by user struct
 func DisconnectClient(user User) {
 	delete(Clients, user.ID)
 	MSG_Channel <- Message{UserID: user.ID, Username: user.Username, Type: "LEAVE"}
 }
 
+// prepare things before application startup
 func Prepare() {
 	if CheckFolderExists(SRC_FOLDER_PATH) == false {
 		CreateFolder(SRC_FOLDER_PATH)

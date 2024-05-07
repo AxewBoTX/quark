@@ -20,8 +20,8 @@ func IndexHandler(c echo.Context) error {
 
 func WebSocketHandler(c echo.Context) error {
 	websocket.Handler(func(conn *websocket.Conn) {
-		// fetch user data based on client session cookie
 		rest_client := resty.New()
+		// get session cookie from the client connection
 		session_cookie, session_cookie_get_err := c.Request().Cookie(lib.SESSION_COOKIE_NAME)
 		if session_cookie_get_err != nil {
 			lib.FatalWithColor(
@@ -33,6 +33,7 @@ func WebSocketHandler(c echo.Context) error {
 				session_cookie_get_err,
 			)
 		}
+		// fetch user data from the database according to the session cookie
 		res, user_fetch_err := rest_client.R().
 			Get("http://" + lib.HOST + lib.PORT + "/users/token/" + session_cookie.Value)
 		if user_fetch_err != nil {
@@ -45,6 +46,7 @@ func WebSocketHandler(c echo.Context) error {
 				user_fetch_err,
 			)
 		}
+		// decode server JSON response
 		var user lib.User
 		if resp_decode_err := json.Unmarshal(res.Body(), &user); resp_decode_err != nil {
 			lib.FatalWithColor(
@@ -68,6 +70,7 @@ func WebSocketHandler(c echo.Context) error {
 			conn.Close()
 		}()
 
+		// Message read loop
 		for {
 			var msg lib.Message
 			if message_read_err := websocket.JSON.Receive(conn, &msg); message_read_err != nil {
@@ -83,7 +86,7 @@ func WebSocketHandler(c echo.Context) error {
 			msg.UserID = user.ID
 			msg.Username = user.Username
 			msg.Type = "MSG"
-			lib.MSG_Channel <- msg
+			lib.MSG_Channel <- msg // broadcast client message
 		}
 	}).ServeHTTP(c.Response(), c.Request())
 	return nil
