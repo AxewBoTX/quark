@@ -16,6 +16,7 @@ templ Chat_Page() {
 	document.body.addEventListener("htmx:wsAfterMessage", (event) => {
 		const messageList = document.getElementById("MessageList")
 		const message = JSON.parse(event.detail.message)
+		document.getElementById("MessageInput").value = ""
 		switch (message.type) {
 			case "JOIN":
 				messageList.insertAdjacentHTML("beforeend", `<div class="flex justify-center text-semibold">
@@ -37,7 +38,7 @@ templ Chat_Page() {
 	})
 </script>
 		<div hx-ext="ws" ws-connect={ ctx.Value("realtime_server_addr").(string) }>
-			<div class="flex justify-center w-full">
+			<div class="flex justify-center w-full mb-[120px]">
 				<div id="MessageList" class="flex flex-col w-full gap-[25px] p-3 max-w-[1200px]"></div>
 			</div>
 			<div class="fixed left-0 right-0 bottom-0 flex items-center justify-center">

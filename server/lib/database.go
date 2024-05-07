@@ -31,30 +31,11 @@ var (
 		created INTEGER,
 		updated INTEGER
 	);`
-	MessageTableCreateQuery = `CREATE TABLE IF NOT EXISTS %s(
-		id TEXT PRIMARY KEY,
-		user_id TEXT,
-		username TEXT,
-		body TEXT,
-		type TEXT,
-		created INTEGER,
-		FOREIGN KEY(user_id) REFERENCES %s(id) ON DELETE CASCADE
-	);`
 )
 
 // create database tables
 func HandleMigrations(DB *sql.DB) {
 	if _, table_create_err := DB.Exec(fmt.Sprintf(UserTableCreateQuery, USER_TABLE_NAME)); table_create_err != nil {
-		FatalWithColor(
-			"FATAL",
-			"0",
-			COLOR_RED,
-			"Failed TO Create Database Table",
-			"Error",
-			table_create_err,
-		)
-	}
-	if _, table_create_err := DB.Exec(fmt.Sprintf(MessageTableCreateQuery, MESSAGE_TABLE_NAME, USER_TABLE_NAME)); table_create_err != nil {
 		FatalWithColor(
 			"FATAL",
 			"0",

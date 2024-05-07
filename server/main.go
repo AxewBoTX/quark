@@ -80,7 +80,6 @@ func main() {
 	server.GET("/", handlers.IndexHandler)
 	server.GET("/ws", handlers.WebSocketHandler)
 	handlers.Users(server.Group("/users"), DB)
-	handlers.Messages(server.Group("/messages"), DB)
 
 	// this function runs after the main function has ended
 	defer func() {

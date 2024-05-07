@@ -15,7 +15,6 @@ func Broadcaster() {
 		select {
 		case data := <-MSG_Channel:
 			data.Log()
-			data.Write()
 			for _, client := range Clients {
 				if message_broadcast_err := websocket.JSON.Send(client, data); message_broadcast_err != nil {
 					ErrorWithColor(
@@ -82,16 +81,6 @@ func HandleConfig() {
 		USER_TABLE_NAME = DefaultConfig.UserTableName
 	} else {
 		USER_TABLE_NAME = CurrentConfig.UserTableName
-	}
-	if len(CurrentConfig.MessageTableName) == 0 || CurrentConfig.MessageTableName == "" {
-		WarnWithColor("WARN",
-			"0",
-			COLOR_YELLOW,
-			"MessageTableName value not found in config, using default value",
-		)
-		MESSAGE_TABLE_NAME = DefaultConfig.MessageTableName
-	} else {
-		MESSAGE_TABLE_NAME = CurrentConfig.MessageTableName
 	}
 }
 

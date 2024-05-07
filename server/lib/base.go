@@ -5,7 +5,6 @@ import (
 
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/log"
-	"github.com/go-resty/resty/v2"
 	"github.com/pelletier/go-toml"
 	"golang.org/x/net/websocket"
 )
@@ -27,13 +26,12 @@ const (
 
 // variable declarations
 var (
-	HOST               string
-	PORT               string
-	DB_FILE_PATH       string
-	USER_TABLE_NAME    string
-	MESSAGE_TABLE_NAME string
-	Clients            = make(map[string]*websocket.Conn)
-	MSG_Channel        = make(chan Message)
+	HOST            string
+	PORT            string
+	DB_FILE_PATH    string
+	USER_TABLE_NAME string
+	Clients         = make(map[string]*websocket.Conn)
+	MSG_Channel     = make(chan Message)
 )
 
 // type definitions
@@ -91,29 +89,6 @@ func (msg *Message) Log() {
 			msg.Username+" left the server!",
 			"User",
 			map[string]interface{}{"UserID": msg.UserID, "Username": msg.Username},
-		)
-	}
-}
-
-// write message to database
-func (msg *Message) Write() {
-	rest_client := resty.New()
-	_, message_write_err := rest_client.R().
-		SetHeader("Content-Type", "application/json").
-		SetBody(map[string]interface{}{
-			"user_id":  msg.UserID,
-			"username": msg.Username,
-			"body":     msg.Body,
-			"type":     msg.Type,
-		}).Post("http://" + HOST + PORT + "/messages/")
-	if message_write_err != nil {
-		ErrorWithColor(
-			"ERROR",
-			"0",
-			COLOR_RED,
-			"Failed To Write Message To Database",
-			"Error",
-			message_write_err,
 		)
 	}
 }
