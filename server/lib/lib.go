@@ -16,8 +16,22 @@ func Broadcaster() {
 		select {
 		case data := <-MSG_Channel:
 			data.Log()
-			for _, client := range Clients {
-				if message_broadcast_err := websocket.JSON.Send(client, data); message_broadcast_err != nil {
+			for user_id, client := range Clients {
+				var same bool
+				if user_id == data.UserID {
+					same = true
+				} else {
+					same = false
+				}
+				if message_broadcast_err := websocket.JSON.Send(client, map[string]interface{}{
+					"id":       data.ID,
+					"user_id":  "",
+					"username": data.Username,
+					"body":     data.Body,
+					"type":     data.Type,
+					"created":  data.Created,
+					"same":     same,
+				}); message_broadcast_err != nil {
 					ErrorWithColor(
 						"ERROR",
 						"0",
