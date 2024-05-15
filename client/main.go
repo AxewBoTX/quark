@@ -68,7 +68,7 @@ func main() {
 		lib.COLOR_BLUE,
 		"Quark client started successfully",
 		"URL",
-		"http://localhost"+lib.PORT,
+		"http://"+lib.HOST+lib.PORT,
 	)
 
 	// serving static web library files

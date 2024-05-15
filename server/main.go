@@ -73,7 +73,7 @@ func main() {
 		lib.COLOR_BLUE,
 		"Quark server started successfully",
 		"URL",
-		"http://localhost"+lib.PORT,
+		"http://"+lib.HOST+lib.PORT,
 	)
 
 	// route handlers
