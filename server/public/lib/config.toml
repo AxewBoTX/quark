@@ -1,4 +1,4 @@
 port = "8080"
-host = "quark_server"
+host = "localhost"
 database_file_name = "base.db"
 user_table_name = "usr_base"

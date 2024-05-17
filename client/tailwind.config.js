@@ -28,7 +28,7 @@ export default {
           "base-100": "#14140C", //background
           "base-content": "#E6E2D5", //onBackground
           surface: "#14140C", //surface
-          "info-content": "#E6E2D5", //onSurface
+          onSurface: "#E6E2D5", //onSurface
           surfaceVariant: "#49473A", //surfaceVariant
           "base-200": "#CAC7B5", //onSurfaceVariant
           neutral: "#949181", //outline
@@ -62,7 +62,19 @@ export default {
     ],
   },
   theme: {
-    extend: {},
+    extend: {
+      keyframes: {
+        toast: {
+          "0%": { transform: "translateX(100%)", opacity: "0" },
+          "5%": { transform: "translateX(0)", opacity: "1" },
+          "95%": { transform: "translateX(0)", opacity: "1" },
+          "100%": { transform: "translateX(100%)", opacity: "0" },
+        },
+      },
+      animation: {
+        toast: "toast 2.5s steps(60,end) forwards",
+      },
+    },
   },
   plugins: [require("daisyui")],
 };

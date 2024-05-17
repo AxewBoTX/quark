@@ -10,8 +10,10 @@ templ Chat_Page() {
 	document.body.addEventListener("htmx:wsBeforeSend", (event) => {
 		event.preventDefault()
 		const message = {...JSON.parse(event.detail.message)}
-		const socket = event.detail.socketWrapper
-		socket.send(JSON.stringify(message))
+		if (message.body.length != 0 || message.body != "") {
+			const socket = event.detail.socketWrapper
+			socket.send(JSON.stringify(message))
+		}
 	})
 	document.body.addEventListener("htmx:wsAfterMessage", (event) => {
 		const messageList = document.getElementById("MessageList")
@@ -25,8 +27,10 @@ templ Chat_Page() {
 				break;
 			case "MSG":
 				messageList.insertAdjacentHTML("beforeend", `<div class="flex flex-col ${message.same ? 'items-end' : 'items-start'}">
-					<p class="text-lg font-semibold bg-secondary text-secondary-content w-fit pl-1 pr-2 rounded-tl-lg rounded-tr-lg" >${message.username}</p>
-					<p class="bg-accent text-accent-content rounded-tl-none rounded-bl-badge rounded-r-badge px-4 py-1 max-w-[400px]">${message.body}</p>
+				<div class="bg-info rounded-xl flex flex-col ${message.same ? 'items-end' : 'items-start'}">
+					<p class="text-lg font-semibold text-base-content w-fit pl-2 pr-2" >${message.username}</p>
+					<p class="text-base-200 pl-2 pr-4 py-1 max-w-[400px] text-left">${message.body}</p>
+					</div>
 				</div>`)
 				break;
 			case "LEAVE":

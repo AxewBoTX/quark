@@ -29,7 +29,7 @@ func AuthRegisterHandler(c echo.Context) error {
 	pass_toast := `<div
 			id="registerToast"
 			role="alert"
-			class="max-w-[300px] p-3 rounded-lg flex item-center justify-center gap-[15px] bg-base-300 text-secondary-content fixed top-5 right-5"
+			class="max-w-[300px] p-3 rounded-lg flex item-center justify-center gap-[15px] bg-base-300 text-secondary-content fixed top-5 right-5 opacity-0 animate-toast"
 		>
 			<svg xmlns="http://www.w3.org/2000/svg" class="stroke-success shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
 				<path
@@ -44,7 +44,7 @@ func AuthRegisterHandler(c echo.Context) error {
 	fail_toast := `<div
 			id="registerToast"
 			role="alert"
-			class="max-w-[300px] p-3 rounded-lg flex item-center justify-center gap-[15px] bg-base-300 text-secondary-content fixed top-5 right-5"
+			class="max-w-[300px] p-3 rounded-lg flex item-center justify-center gap-[15px] bg-base-300 text-secondary-content fixed top-5 right-5 opacity-0 animate-toast"
 		>
 			<svg xmlns="http://www.w3.org/2000/svg" class="stroke-error shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
 				<path
