@@ -16,6 +16,11 @@ func AuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 		TemplateRenderState := false
 		client := resty.New()
 		URL := strings.TrimSpace(c.Request().URL.String())
+
+		if URL == "/" {
+			c.Redirect(http.StatusSeeOther, "/login")
+		}
+
 		// check if session cookie is present
 		if !strings.HasPrefix(URL, "/auth") {
 			session_cookie, session_cookie_get_err := c.Cookie(lib.SESSION_COOKIE_NAME)

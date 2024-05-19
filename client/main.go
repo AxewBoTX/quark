@@ -80,7 +80,6 @@ func main() {
 	//middleware
 	server.Use(handlers.AuthMiddleware)
 	// routes
-	server.GET("/", handlers.IndexHandler)
 	server.GET("/register", handlers.RegisterHandler)
 	server.GET("/login", handlers.LoginHandler)
 	server.GET("/chat", handlers.ChatHandler)

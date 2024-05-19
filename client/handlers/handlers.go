@@ -11,16 +11,6 @@ import (
 	"quark/client/web/routes"
 )
 
-// index(/) route handler
-func IndexHandler(c echo.Context) error {
-	TemplateRenderState := c.Get("TemplateRenderState")
-	if TemplateRenderState == true {
-		return web.RenderTemplTemplate(c, http.StatusOK, routes.Home_Page())
-	} else {
-		return nil
-	}
-}
-
 // (/register) route handler
 func RegisterHandler(c echo.Context) error {
 	TemplateRenderState := c.Get("TemplateRenderState")
