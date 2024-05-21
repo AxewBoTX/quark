@@ -35,7 +35,7 @@ func main() {
 	lib.DefaultConfig.LoadConfig(default_config_bytes)
 
 	// current config setup
-	if lib.CheckFileExists(lib.CURRENT_CONFIG_FILE_PATH) == true {
+	if lib.CheckItemExists(lib.CURRENT_CONFIG_FILE_PATH, false) == true {
 		current_config_bytes, config_file_read_err := os.ReadFile(lib.CURRENT_CONFIG_FILE_PATH)
 		if config_file_read_err != nil {
 			lib.FatalWithColor(
@@ -49,7 +49,7 @@ func main() {
 		}
 		lib.CurrentConfig.LoadConfig(current_config_bytes)
 	} else {
-		lib.CreateFile(lib.CURRENT_CONFIG_FILE_PATH)
+		lib.CreateItem(lib.CURRENT_CONFIG_FILE_PATH, false)
 		if config_write_err := os.WriteFile(lib.CURRENT_CONFIG_FILE_PATH, default_config_bytes, 0644); config_write_err != nil {
 			lib.FatalWithColor("FATAL", "0", lib.COLOR_RED, "Failed to write to config file", "Error", config_write_err)
 		}

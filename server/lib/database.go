@@ -11,8 +11,8 @@ import (
 
 // handle database file and folder creation and initialize SQL database
 func CreateDatabase() *sql.DB {
-	if CheckFileExists(DB_FILE_PATH) == false {
-		CreateFile(DB_FILE_PATH)
+	if CheckItemExists(DB_FILE_PATH, false) == false {
+		CreateItem(DB_FILE_PATH, false)
 	}
 	DB, db_open_err := sql.Open("sqlite", DB_FILE_PATH)
 	if db_open_err != nil {
