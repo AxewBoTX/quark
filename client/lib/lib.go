@@ -55,7 +55,7 @@ func HandleConfig() {
 		CurrentConfig.ServerPort,
 		DefaultConfig.ServerPort,
 		"ServerPort",
-		func(val string) { SERVER_PORT = val },
+		func(val string) { SERVER_PORT = ":" + val },
 	)
 }
 
