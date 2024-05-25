@@ -11,7 +11,7 @@ import (
 
 // constant declarations
 const (
-	SRC_FOLDER_PATH          string = "base_src"
+	SRC_FOLDER_PATH          string = "base_src_server"
 	CURRENT_CONFIG_FILE_PATH string = SRC_FOLDER_PATH + "/" + "config.toml"
 	DEFAULT_CONFIG_FILE_PATH string = "public/lib/config.toml"
 	SESSION_COOKIE_NAME      string = "usr_session"

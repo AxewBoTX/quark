@@ -3,7 +3,7 @@ version: "3"
 env:
   BINARY_NAME: "quark_server"
   BUILD_DIR: "build"
-  SRC_DIR: "base_src"
+  SRC_DIR: "base_src_server"
 
 tasks:
   dev:

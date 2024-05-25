@@ -1,0 +1,26 @@
+version: "3"
+
+env:
+  BUILD_DIR: "build"
+
+tasks:
+  build:
+    cmds:
+      - mkdir -p {{ .BUILD_DIR }}
+      - task: build-server
+      - task: build-client
+      - mv server/{{ .BUILD_DIR }}/quark_server {{ .BUILD_DIR }}
+      - mv client/{{ .BUILD_DIR }}/quark_client {{ .BUILD_DIR }}
+
+  build-server:
+    dir: "server"
+    cmds:
+      - task build
+
+  build-client:
+    dir: "client"
+    cmds:
+      - task build
+  clean:
+    - rm -rf $BUILD_DIR
+    - rm -rf $SRC_DIR
