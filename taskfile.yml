@@ -15,11 +15,14 @@ tasks:
   build-server:
     dir: "server"
     cmds:
+      - go mod download
       - task build
 
   build-client:
     dir: "client"
     cmds:
+      - go mod download
+      - bun install --yarn
       - task build
   clean:
     - rm -rf $BUILD_DIR

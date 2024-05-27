@@ -20,3 +20,22 @@ Self host chat app in 1 file
 - [bigskysoftware/htmx](https://github.com/bigskysoftware/htmx) - high power tools for HTML
 - [go-resty/resty](https://github.com/go-resty/resty) - Simple HTTP and REST client library for Go
 - [bcrypt](https://pkg.go.dev/golang.org/x/crypto/bcrypt) - Provos and Mazières's bcrypt adaptive hashing algorithm implementation
+
+## How to setup
+
+1. Install the required technologies:-
+   - [golang:1.22.0](https://tip.golang.org/doc/go1.22)
+   - [bun:1.1.10](https://github.com/oven-sh/bun/releases/tag/bun-v1.1.10)
+2. Clone the github repository and `cd` into it
+   ```
+   git clone https://github.com/axewbotx/quark && cd quark
+   ```
+3. Install [go-task](https://github.com/go-task/task)
+   ```
+   sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b ~/.local/bin && export PATH=$PATH:~/.local/bin
+   ```
+4. Build the project
+   ```
+   task build
+   ```
+5. The `quark_server` and `quark_client` binaries will be awailable in newly created `build` directory
